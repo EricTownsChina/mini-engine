@@ -2,9 +2,10 @@ package priv.eric.mini.engine.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
- * Description: 节点
+ * Description: 顶点
  *
  * @author EricTowns
  * @date 2023/4/21 23:49
@@ -17,13 +18,20 @@ public abstract class Vertex {
 
     private String desc;
 
-    private Integer state;
-
     private List<Vertex> pre = new ArrayList<>(0);
 
     private List<Vertex> post = new ArrayList<>(0);
 
     public Vertex() {
+    }
+
+    public Vertex(String id, String name, String desc) {
+        if (null == id || id.isEmpty()) {
+            id = UUID.randomUUID().toString();
+        }
+        this.id = id;
+        this.name = name;
+        this.desc = desc;
     }
 
     public String getId() {
@@ -50,20 +58,20 @@ public abstract class Vertex {
         this.desc = desc;
     }
 
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
     public List<Vertex> getPre() {
         return this.pre;
     }
 
+    public void setPre(List<Vertex> pre) {
+        this.pre = pre;
+    }
+
     public List<Vertex> getPost() {
         return this.post;
+    }
+
+    public void setPost(List<Vertex> post) {
+        this.post = post;
     }
 
     public void addPre(Vertex vertex) {
@@ -82,30 +90,11 @@ public abstract class Vertex {
         this.post.addAll(vertexList);
     }
 
-    public void setPre(List<Vertex> pre) {
-        this.pre = pre;
-    }
-
-    public void setPost(List<Vertex> post) {
-        this.post = post;
-    }
-
     /**
-     * 该节点已准备
-     * @return boolean
-     */
-    public abstract boolean isReady();
-
-    /**
-     * 该节点是有效的
+     * 顶点是否有效
+     *
      * @return boolean
      */
     public abstract boolean isValid();
-
-    /**
-     * 该节点已经结束
-     * @return boolean
-     */
-    public abstract boolean isOver();
 
 }

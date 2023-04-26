@@ -8,13 +8,19 @@ import java.util.Objects;
  * @author EricTowns
  * @date 2023/4/22 00:32
  */
-public abstract class Edge {
+public abstract class Edge<T extends Vertex> {
 
     private String from;
 
     private String to;
 
     public Edge() {
+    }
+
+    public Edge(String from, String to) {
+        if (null == from || from.isEmpty() || null == to || to.isEmpty()) {
+            throw new IllegalArgumentException("missing 'from' or 'to' fields");
+        }
     }
 
     public String getFrom() {
