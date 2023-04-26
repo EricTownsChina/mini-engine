@@ -86,6 +86,6 @@ public abstract class Graph<T extends Vertex> {
      *
      * @return boolean
      */
-    abstract boolean isCycle();
+    abstract boolean hasCycle();
 
 }
