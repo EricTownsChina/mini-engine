@@ -1,5 +1,8 @@
 package priv.eric.mini.engine.entity;
 
+import priv.eric.mini.engine.entity.graph.Edge;
+import priv.eric.mini.engine.entity.graph.Vertex;
+
 import java.util.*;
 import java.util.stream.Collectors;
 

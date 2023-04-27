@@ -1,5 +1,7 @@
 package priv.eric.mini.engine.entity;
 
+import priv.eric.mini.engine.entity.graph.Vertex;
+
 /**
  * Description: TODO
  *
