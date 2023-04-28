@@ -67,7 +67,7 @@ public final class Graphs {
      * @param <V>        Vertex
      * @return boolean
      */
-    private static <V extends Vertex> boolean canTraverseWithoutReusingEdge(Graph<V> graph, V preVertex, V postVertex,) {
+    private static <V extends Vertex> boolean canTraverseWithoutReusingEdge(Graph<V> graph, V preVertex, V postVertex) {
         return graph.directed() || !Objects.equals(preVertex, postVertex);
     }
 
