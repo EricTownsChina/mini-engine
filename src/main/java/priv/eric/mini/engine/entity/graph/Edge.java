@@ -8,35 +8,59 @@ import java.util.Objects;
  * @author EricTowns
  * @date 2023/4/22 00:32
  */
-public abstract class Edge<T extends Vertex> {
+public abstract class Edge<V extends Vertex> {
 
-    private String from;
+    private V from;
 
-    private String to;
+    private V to;
+
+    private Number weight;
 
     public Edge() {
     }
 
-    public Edge(String from, String to) {
-        if (null == from || from.isEmpty() || null == to || to.isEmpty()) {
+    public Edge(V from, V to) {
+        if (null == from || null == to) {
             throw new IllegalArgumentException("missing 'from' or 'to' fields");
         }
+        this.from = from;
+        this.to = to;
     }
 
-    public String getFrom() {
+    public Edge(V from, V to, Number weight) {
+        if (null == from || null == to) {
+            throw new IllegalArgumentException("missing 'from' or 'to' fields");
+        }
+        this.from = from;
+        this.to = to;
+        this.weight = weight;
+    }
+
+    public V getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public Edge<V> setFrom(V from) {
         this.from = from;
+        return this;
     }
 
-    public String getTo() {
+    public V getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public Edge<V> setTo(V to) {
         this.to = to;
+        return this;
+    }
+
+    public Number getWeight() {
+        return weight;
+    }
+
+    public Edge<V> setWeight(Number weight) {
+        this.weight = weight;
+        return this;
     }
 
     @Override
@@ -47,7 +71,7 @@ public abstract class Edge<T extends Vertex> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Edge edge = (Edge) o;
+        Edge<V> edge = (Edge<V>) o;
         return Objects.equals(from, edge.from) && Objects.equals(to, edge.to);
     }
 

@@ -11,22 +11,36 @@ import java.util.Set;
 public interface Graph<V extends Vertex> {
 
     /**
-     * all vertex in this graph
+     * all vertexes in this graph
      *
      * @return vertex set
      */
     Set<V> vertexes();
 
     /**
-     * all edge in this graph
+     * all edges in this graph
      *
      * @return edge set
      */
     Set<Edge<V>> edges();
 
     /**
-     * adjacency vertex of parameter
-     * this is equal union of {@link #preVertexes(Vertex)} and {@link #postVertexes(Vertex)}
+     * Returns true if the edges in this graph are directed
+     *
+     * @return boolean
+     */
+    boolean directed();
+
+    /**
+     * Returns true if this graph allows self-loops (edges that connect a node to itself)
+     *
+     * @return boolean
+     */
+    boolean allowsSelfLoops();
+
+    /**
+     * all vertexes in this graph adjacency to vertex
+     * this is equal union of {@link #pre(Vertex)} and {@link #post(Vertex)}
      *
      * @param vertex vertex
      * @return vertex set
@@ -34,19 +48,62 @@ public interface Graph<V extends Vertex> {
     Set<V> adjacencyVertexes(V vertex);
 
     /**
-     * pre-vertex set of parameter
+     * vertex's pre-vertexes
      *
      * @param vertex vertex
      * @return vertex set
      */
-    Set<V> preVertexes(V vertex);
+    Set<V> pre(V vertex);
 
     /**
-     * post-vertex set of parameter
+     * vertex's post-vertexes
      *
      * @param vertex vertex
      * @return vertex set
      */
-    Set<V> postVertexes(V vertex);
+    Set<V> post(V vertex);
+
+    /**
+     * the edges in this graph whose endpoints include vertex.
+     * this is equal union of incoming and outgoing edges.
+     *
+     * @return edge set
+     */
+    Set<Edge<V>> incidentEdges(V vertex);
+
+    /**
+     * Returns true if there is an edge that directly connects {@param from} to {@param to}.
+     *
+     * @param from from which vertex
+     * @param to   to which vertex
+     * @return boolean
+     */
+    boolean connecting(V from, V to);
+
+    /**
+     * the count of vertex's incident edges
+     * this is equal union of {@link #inDegree(Vertex)} and {@link #outDegree(Vertex)}
+     *
+     * @param vertex vertex
+     * @return count
+     */
+    int degree(V vertex);
+
+    /**
+     * the count of vertex's incoming edges;
+     *
+     * @param vertex vertex
+     * @return count
+     */
+    int inDegree(V vertex);
+
+    /**
+     * the count of vertex's outgoing edges;
+     *
+     * @param vertex vertex
+     * @return count
+     */
+    int outDegree(V vertex);
+
 
 }
