@@ -2,6 +2,8 @@ package priv.eric.mini.engine.entity.dag;
 
 import priv.eric.mini.engine.entity.graph.Vertex;
 
+import java.util.Objects;
+
 /**
  * Description: Dag node
  *
@@ -60,6 +62,16 @@ public abstract class Node extends Vertex {
     @Override
     public int hashCode() {
         return getId() != null ? getId().hashCode() : 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     public enum Type {

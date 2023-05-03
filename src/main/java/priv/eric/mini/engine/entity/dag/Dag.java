@@ -17,6 +17,14 @@ public class Dag extends AbstractGraph<Node> {
 
     private Set<Edge<Node>> edges;
 
+    public Dag(Set<Node> nodes, Set<Edge<Node>> edges) {
+        this.nodes = nodes;
+        this.edges = edges;
+    }
+
+    public void check() {
+
+    }
 
     @Override
     public Set<Node> vertexes() {
