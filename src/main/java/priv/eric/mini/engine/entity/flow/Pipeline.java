@@ -5,6 +5,8 @@ import priv.eric.mini.engine.entity.dag.Node;
 import priv.eric.mini.engine.entity.graph.Vertex;
 import priv.eric.mini.engine.entity.dag.Node;
 
+import java.util.Set;
+
 /**
  * Description: work pipeline
  *
@@ -18,6 +20,8 @@ public class Pipeline {
     private Context context;
 
     private Node first;
+
+    private Set<Node> next;
 
     private State state;
 
@@ -62,11 +66,19 @@ public class Pipeline {
         this.state = state;
     }
 
-    public void run(Context context) {
-
+    public Set<Node> getNext() {
+        return next;
     }
 
-    public void debug() {
+    public void setNext(Set<Node> next) {
+        this.next = next;
+    }
+
+    public void run(Context context) {
+        dag.dfs(first, (node) -> node.execute(this));
+    }
+
+    public void debug(Context context) {
 
     }
 

@@ -55,9 +55,8 @@ public abstract class Node extends Vertex {
         return state;
     }
 
-    public Node setState(State state) {
+    public void setState(State state) {
         this.state = state;
-        return this;
     }
 
     public String nextId() {
@@ -84,14 +83,14 @@ public abstract class Node extends Vertex {
      *
      * @param pipeline {@link Pipeline}
      */
-    abstract void execute(Pipeline pipeline);
+    public abstract void execute(Pipeline pipeline);
 
     /**
      * record node info when pipeline run to the node.
      *
      * @param pipeline {@link Pipeline}
      */
-    abstract void record(Pipeline pipeline);
+    public abstract void record(Pipeline pipeline);
 
     public enum Type {
         BLANK,
