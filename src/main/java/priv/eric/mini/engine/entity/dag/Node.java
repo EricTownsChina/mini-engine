@@ -1,8 +1,7 @@
 package priv.eric.mini.engine.entity.dag;
 
+import priv.eric.mini.engine.entity.flow.Pipeline;
 import priv.eric.mini.engine.entity.graph.Vertex;
-
-import java.util.Objects;
 
 /**
  * Description: Dag node
@@ -18,10 +17,13 @@ public abstract class Node extends Vertex {
 
     private Type type;
 
+    private State state;
+
     public Node(String name, String desc, Type type) {
         this.name = name;
         this.desc = desc;
         this.type = type;
+        this.state = State.WAIT;
     }
 
     public String getName() {
@@ -49,6 +51,19 @@ public abstract class Node extends Vertex {
         return this;
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public Node setState(State state) {
+        this.state = state;
+        return this;
+    }
+
+    public String nextId() {
+        return null;
+    }
+
     @Override
     public boolean isValid() {
         return true;
@@ -64,15 +79,19 @@ public abstract class Node extends Vertex {
         return getId() != null ? getId().hashCode() : 0;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
+    /**
+     * when pipeline is running, run to the node to execute the function.
+     *
+     * @param pipeline {@link Pipeline}
+     */
+    abstract void execute(Pipeline pipeline);
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+    /**
+     * record node info when pipeline run to the node.
+     *
+     * @param pipeline {@link Pipeline}
+     */
+    abstract void record(Pipeline pipeline);
 
     public enum Type {
         BLANK,
@@ -81,5 +100,12 @@ public abstract class Node extends Vertex {
         CACHE,
         FILTER,
         MAP,
+    }
+
+    public enum State {
+        WAIT,
+        RUNNING,
+        COMPLETE,
+        PAUSE
     }
 }
