@@ -2,8 +2,6 @@ package priv.eric.mini.engine.entity.flow;
 
 import priv.eric.mini.engine.entity.dag.Dag;
 import priv.eric.mini.engine.entity.dag.Node;
-import priv.eric.mini.engine.entity.graph.Vertex;
-import priv.eric.mini.engine.entity.dag.Node;
 
 import java.util.Set;
 
@@ -27,9 +25,8 @@ public class Pipeline {
 
     private Mode mode;
 
-    public Pipeline(Dag dag, Context context, Node first) {
+    public Pipeline(Dag dag, Node first) {
         this.dag = dag;
-        this.context = context;
         this.first = first;
         this.state = State.BUILD;
     }
@@ -74,11 +71,14 @@ public class Pipeline {
         this.next = next;
     }
 
-    public void run(Context context) {
-        dag.dfs(first, (node) -> node.execute(this));
+    public void run() {
+        dag.dfs(first, (node) -> {
+            node.process(context);
+            node.setState(Node.State.COMPLETE);
+        });
     }
 
-    public void debug(Context context) {
+    public void debug() {
 
     }
 

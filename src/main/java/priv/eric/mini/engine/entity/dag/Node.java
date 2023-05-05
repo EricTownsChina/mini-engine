@@ -1,6 +1,6 @@
 package priv.eric.mini.engine.entity.dag;
 
-import priv.eric.mini.engine.entity.flow.Pipeline;
+import priv.eric.mini.engine.entity.flow.Context;
 import priv.eric.mini.engine.entity.graph.Vertex;
 
 /**
@@ -19,10 +19,11 @@ public abstract class Node extends Vertex {
 
     private State state;
 
-    public Node(String name, String desc, Type type) {
+    public Node(String id, String name, String desc) {
+        super.setId(id);
         this.name = name;
         this.desc = desc;
-        this.type = type;
+        this.type = type();
         this.state = State.WAIT;
     }
 
@@ -79,18 +80,31 @@ public abstract class Node extends Vertex {
     }
 
     /**
+     * declare type of node.
+     *
+     * @return {@link Type}
+     */
+    public abstract Type type();
+
+    /**
+     * before node build, add some special component, like spring component,
+     * this function will execute once when node building.
+     */
+    public abstract void addComponents();
+
+    /**
      * when pipeline is running, run to the node to execute the function.
      *
-     * @param pipeline {@link Pipeline}
+     * @param context {@link Context}
      */
-    public abstract void execute(Pipeline pipeline);
+    public abstract void process(Context context);
 
     /**
      * record node info when pipeline run to the node.
      *
-     * @param pipeline {@link Pipeline}
+     * @param context {@link Context}
      */
-    public abstract void record(Pipeline pipeline);
+    public abstract void record(Context context);
 
     public enum Type {
         BLANK,

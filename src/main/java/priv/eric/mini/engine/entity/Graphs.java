@@ -25,7 +25,7 @@ public final class Graphs {
         Set<Edge<V>> edges = graph.edges();
         if (vertexes.size() == 1) {
             return false;
-        } else if (edges.size() >= vertexes.size()) {
+        } else if (!graph.directed() && edges.size() >= vertexes.size()) {
             return true;
         } else {
             Map<V, VertexTravelState> travelVertexMap = new HashMap<>(vertexes.size());

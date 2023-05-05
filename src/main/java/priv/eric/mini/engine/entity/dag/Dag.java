@@ -27,6 +27,7 @@ public class Dag extends AbstractGraph<Node> {
 
     public Dag(Set<Node> nodes, Set<Edge<Node>> edges) {
         super(nodes, edges);
+        check();
         this.nodeMap = nodes.stream().collect(Collectors.toMap(Vertex::getId, n -> n));
     }
 
@@ -38,6 +39,7 @@ public class Dag extends AbstractGraph<Node> {
         if (startNode == null) {
             throw new DagException(ExceptionType.DAG_TRAVERSE_NO_ROOT);
         }
+        consumer.accept(startNode);
         Set<Node> post = adjacencyMap.getOrDefault(startNode, new HashSet<>(0));
         for (Node node : post) {
             dfsTraverse(node, adjacencyMap, consumer);
@@ -58,7 +60,7 @@ public class Dag extends AbstractGraph<Node> {
 
     public void check() {
         if (Graphs.hasCycle(this)) {
-            throw new InstantiationException(ExceptionType.GRAPH_NOT_DAG, "graph is not a dag, is has cycle.");
+            throw new InstantiationException(ExceptionType.GRAPH_NOT_DAG, "graph is not a dag, it has cycle.");
         }
     }
 

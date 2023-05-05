@@ -12,17 +12,28 @@ import priv.eric.mini.engine.entity.flow.Pipeline;
  */
 public class PrintNode extends Node {
 
-    public PrintNode(String name, String desc) {
-        super(name, desc, Type.PRINT);
+    public PrintNode(String id, String name, String desc) {
+        super(id, name, desc);
     }
 
     @Override
-    public void execute(Pipeline pipeline) {
-        Context context = pipeline.getContext();
+    public Type type() {
+        return Type.PRINT;
     }
 
     @Override
-    public void record(Pipeline pipeline) {
+    public void addComponents() {
 
     }
+
+    @Override
+    public void process(Context context) {
+        System.out.println(this.getId() + " : " + this.getName() + " : " + this.getDesc());
+    }
+
+    @Override
+    public void record(Context context) {
+
+    }
+
 }
