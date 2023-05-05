@@ -1,24 +1,23 @@
-package priv.eric.mini.engine.entity.nodes;
+package priv.eric.mini.engine.nodes.start;
 
 import priv.eric.mini.engine.entity.dag.Node;
 import priv.eric.mini.engine.entity.flow.Context;
-import priv.eric.mini.engine.entity.flow.Pipeline;
 
 /**
- * Description: print node
+ * Description: TODO
  *
  * @author EricTowns
- * @date 2023/5/5 00:16
+ * @date 2023/5/6 00:34
  */
-public class PrintNode extends Node {
+public class StartNode extends Node {
 
-    public PrintNode(String id, String name, String desc) {
+    public StartNode(String id, String name, String desc) {
         super(id, name, desc);
     }
 
     @Override
     public Type type() {
-        return Type.PRINT;
+        return Type.START;
     }
 
     @Override
@@ -28,12 +27,11 @@ public class PrintNode extends Node {
 
     @Override
     public void process(Context context) {
-        System.out.println(this.getId() + " : " + this.getName() + " : " + this.getDesc());
+
     }
 
     @Override
     public void record(Context context) {
 
     }
-
 }

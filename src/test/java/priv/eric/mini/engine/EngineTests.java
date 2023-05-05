@@ -7,7 +7,7 @@ import priv.eric.mini.engine.entity.dag.Node;
 import priv.eric.mini.engine.entity.flow.Context;
 import priv.eric.mini.engine.entity.flow.Pipeline;
 import priv.eric.mini.engine.entity.graph.Edge;
-import priv.eric.mini.engine.entity.nodes.PrintNode;
+import priv.eric.mini.engine.nodes.print.PrintNode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,9 +46,8 @@ public class EngineTests {
 
         Pipeline pipeline = new Pipeline(dag, printNode);
         Context context = new Context(pipeline);
-        pipeline.setContext(context);
 
-        pipeline.run();
+        pipeline.run(context);
 
         System.out.println("pipeline is end.");
     }

@@ -15,8 +15,6 @@ public class Pipeline {
 
     private Dag dag;
 
-    private Context context;
-
     private Node first;
 
     private Set<Node> next;
@@ -47,14 +45,6 @@ public class Pipeline {
         this.first = first;
     }
 
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
     public State getState() {
         return state;
     }
@@ -71,7 +61,7 @@ public class Pipeline {
         this.next = next;
     }
 
-    public void run() {
+    public void run(Context context) {
         dag.dfs(first, (node) -> {
             node.process(context);
             node.setState(Node.State.COMPLETE);

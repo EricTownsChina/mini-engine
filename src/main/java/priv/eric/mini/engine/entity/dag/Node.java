@@ -108,6 +108,7 @@ public abstract class Node extends Vertex {
 
     public enum Type {
         BLANK,
+        START,
         PRINT,
         SWITCH,
         CACHE,
