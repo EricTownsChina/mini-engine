@@ -66,6 +66,7 @@ public class Pipeline {
             node.process(context);
             node.setState(Node.State.COMPLETE);
         });
+        setState(State.COMPLETE);
     }
 
     public void debug() {

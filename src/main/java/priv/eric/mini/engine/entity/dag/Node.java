@@ -3,6 +3,8 @@ package priv.eric.mini.engine.entity.dag;
 import priv.eric.mini.engine.entity.flow.Context;
 import priv.eric.mini.engine.entity.graph.Vertex;
 
+import java.util.Properties;
+
 /**
  * Description: Dag node
  *
@@ -105,6 +107,22 @@ public abstract class Node extends Vertex {
      * @param context {@link Context}
      */
     public abstract void record(Context context);
+
+    public Properties getGlobalProp(Context context) {
+        return context.getGlobalProp();
+    }
+
+    public void valueToGlobalStorage(Context context, String key, Object value) {
+        context.valueToGlobal(key, value);
+    }
+
+    public Properties getSelfProp(Context context) {
+        return context.getNodeProp().getOrDefault(this, new Properties());
+    }
+
+    public void valueToSelfStorage(Context context, String key, Object value) {
+        context.valueToNode(this, key, value);
+    }
 
     public enum Type {
         BLANK,

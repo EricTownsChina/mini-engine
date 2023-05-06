@@ -3,6 +3,10 @@ package priv.eric.mini.engine.nodes.start;
 import priv.eric.mini.engine.entity.dag.Node;
 import priv.eric.mini.engine.entity.flow.Context;
 
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.Set;
+
 /**
  * Description: TODO
  *
@@ -20,6 +24,8 @@ public class StartNode extends Node {
         return Type.START;
     }
 
+
+
     @Override
     public void addComponents() {
 
@@ -27,7 +33,13 @@ public class StartNode extends Node {
 
     @Override
     public void process(Context context) {
-
+        System.out.println(getId() + " : " + getName() + " : " + getDesc());
+        Properties properties = getSelfProp(context);
+        Set<String> propKeys = properties.stringPropertyNames();
+        for (String propKey : propKeys) {
+            String propValue = properties.getProperty(propKey);
+            valueToSelfStorage(context, propKey, propValue);
+        }
     }
 
     @Override

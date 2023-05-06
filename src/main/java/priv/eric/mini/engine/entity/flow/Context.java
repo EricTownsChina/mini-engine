@@ -78,4 +78,19 @@ public class Context {
         nodeProp.put(node, properties);
     }
 
+    public Properties getGlobalProp() {
+        return globalProp;
+    }
+
+    public Map<String, Object> getGlobalStorage() {
+        return globalStorage;
+    }
+
+    public Map<Node, Properties> getNodeProp() {
+        return nodeProp;
+    }
+
+    public Map<Node, Map<String, Object>> getNodeStorage() {
+        return nodeStorage;
+    }
 }
