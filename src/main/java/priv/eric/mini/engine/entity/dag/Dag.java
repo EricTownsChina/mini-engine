@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +33,7 @@ public class Dag extends AbstractGraph<Node> {
     }
 
     @Override
-    public void dfs(Node start, Consumer<Node> consumer) {
+    public void dfs(Node start, Consumer<Node> consumer, Function<Node, Node> function) {
         Map<Node, Set<Node>> adjacencyMap = super.getAdjacencyMap();
         String startId = start.getId();
         Node startNode = nodeMap.get(startId);
@@ -41,18 +43,24 @@ public class Dag extends AbstractGraph<Node> {
         consumer.accept(startNode);
         Set<Node> post = adjacencyMap.getOrDefault(startNode, new HashSet<>(0));
         for (Node node : post) {
-            dfsTraverse(node, adjacencyMap, consumer);
+            dfsTraverse(node, adjacencyMap, consumer, function);
         }
     }
 
-    private void dfsTraverse(Node node, Map<Node, Set<Node>> adjacencyMap, Consumer<Node> consumer) {
+    private void dfsTraverse(Node node, Map<Node, Set<Node>> adjacencyMap, Consumer<Node> consumer, Function<Node, Node> function) {
         if (Node.State.WAIT == node.getState()) {
             node.setState(Node.State.RUNNING);
             consumer.accept(node);
+            Node nextNode = function.apply(node);
             node.setState(Node.State.COMPLETE);
-            Set<Node> post = adjacencyMap.getOrDefault(node, new HashSet<>(0));
-            for (Node postNode : post) {
-                dfsTraverse(postNode, adjacencyMap, consumer);
+            // if node define next node, use it
+            if (nextNode != null) {
+                dfsTraverse(nextNode, adjacencyMap, consumer, function);
+            } else {
+                Set<Node> post = adjacencyMap.getOrDefault(node, new HashSet<>(0));
+                for (Node postNode : post) {
+                    dfsTraverse(postNode, adjacencyMap, consumer, function);
+                }
             }
         }
     }

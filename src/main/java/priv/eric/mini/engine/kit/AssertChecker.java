@@ -4,7 +4,7 @@ import priv.eric.mini.engine.entity.exception.CheckException;
 import priv.eric.mini.engine.entity.exception.ExceptionType;
 
 /**
- * Description: todo
+ * Description: assert util throws {@link CheckException}
  *
  * @author EricTowns
  * @date 2023/5/8 11:11

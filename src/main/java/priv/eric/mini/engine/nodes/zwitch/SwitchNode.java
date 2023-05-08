@@ -3,6 +3,8 @@ package priv.eric.mini.engine.nodes.zwitch;
 import priv.eric.mini.engine.entity.dag.Node;
 import priv.eric.mini.engine.entity.flow.Context;
 
+import java.util.Properties;
+
 /**
  * Description: TODO
  *
@@ -27,7 +29,12 @@ public class SwitchNode extends Node {
 
     @Override
     public void process(Context context) {
+        Properties properties = getSelfProp(context);
+    }
 
+    @Override
+    public Node nextNode(Context context) {
+        return null;
     }
 
     @Override

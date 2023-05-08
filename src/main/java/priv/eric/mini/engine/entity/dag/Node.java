@@ -62,7 +62,13 @@ public abstract class Node extends Vertex {
         this.state = state;
     }
 
-    public String nextId() {
+    /**
+     * customize the next node of the current node.
+     * default is null.
+     *
+     * @return next node id.
+     */
+    public Node nextNode(Context context) {
         return null;
     }
 

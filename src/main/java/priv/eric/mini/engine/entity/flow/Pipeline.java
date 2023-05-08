@@ -62,10 +62,7 @@ public class Pipeline {
     }
 
     public void run(Context context) {
-        dag.dfs(first, (node) -> {
-            node.process(context);
-            node.setState(Node.State.COMPLETE);
-        });
+        dag.dfs(first, (node) -> node.process(context), (node) -> node.nextNode(context));
         setState(State.COMPLETE);
     }
 
@@ -79,7 +76,7 @@ public class Pipeline {
         }
     }
 
-    public static enum State {
+    public enum State {
         /**
          * pipeline is build.
          */
@@ -106,7 +103,7 @@ public class Pipeline {
         PAUSE
     }
 
-    public static enum Mode {
+    public enum Mode {
         RUN,
         DEBUG
     }

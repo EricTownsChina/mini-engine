@@ -4,6 +4,8 @@ import priv.eric.mini.engine.entity.dag.Node;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Description: extends abstract graph to build a graph entity
@@ -59,5 +61,5 @@ public abstract class AbstractGraph<V extends Vertex> implements Graph<V> {
         return edgeMap;
     }
 
-    public abstract void dfs(V start, Consumer<V> consumer);
+    public abstract void dfs(V start, Consumer<V> consumer, Function<V, V> function);
 }
