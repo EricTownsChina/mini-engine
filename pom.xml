@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>priv.eric</groupId>
     <artifactId>mini-engine</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>pom</packaging>
     <name>mini-engine</name>
     <description>mini-engine</description>
@@ -13,6 +13,7 @@
         <module>domain</module>
         <module>infrastructure</module>
         <module>application</module>
+        <module>interface</module>
     </modules>
 
     <properties>
@@ -44,6 +45,11 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-validation</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
             <dependency>

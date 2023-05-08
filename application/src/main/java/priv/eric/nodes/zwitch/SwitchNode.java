@@ -1,4 +1,4 @@
-package nodes.zwitch;
+package priv.eric.nodes.zwitch;
 
 import dag.Node;
 import flow.Context;

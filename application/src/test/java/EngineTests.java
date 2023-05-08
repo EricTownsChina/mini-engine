@@ -5,8 +5,8 @@ import dag.Node;
 import flow.Context;
 import flow.Pipeline;
 import graph.Edge;
-import nodes.print.PrintNode;
-import nodes.start.StartNode;
+import priv.eric.nodes.print.PrintNode;
+import priv.eric.nodes.start.StartNode;
 import org.junit.jupiter.api.Test;
 
 

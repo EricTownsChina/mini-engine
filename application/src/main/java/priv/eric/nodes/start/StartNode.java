@@ -1,4 +1,4 @@
-package nodes.start;
+package priv.eric.nodes.start;
 
 
 import dag.Node;
