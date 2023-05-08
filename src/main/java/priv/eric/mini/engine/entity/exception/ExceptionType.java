@@ -8,6 +8,10 @@ package priv.eric.mini.engine.entity.exception;
  */
 public enum ExceptionType {
 
+    FAILED_CHECK(0, 1000, "failed checked"),
+    PARAM_IS_EMPTY(0, 1001, "param can not be empty."),
+    EXPRESS_NOT_START_WITH_SYMBOL(1, 1002, "fetch context value should use express start with $"),
+
     GRAPH_NOT_DAG(1, 2001, "graph is not a dag."),
 
     DAG_TRAVERSE_NO_ROOT(1, 3001, "there is no root node when traverse dag.");

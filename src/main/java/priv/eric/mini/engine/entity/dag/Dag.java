@@ -1,10 +1,9 @@
 package priv.eric.mini.engine.entity.dag;
 
-import priv.eric.mini.engine.entity.Graphs;
+import priv.eric.mini.engine.entity.graph.Graphs;
 import priv.eric.mini.engine.entity.exception.DagException;
 import priv.eric.mini.engine.entity.exception.ExceptionType;
 import priv.eric.mini.engine.entity.exception.InstantiationException;
-import priv.eric.mini.engine.entity.flow.Pipeline;
 import priv.eric.mini.engine.entity.graph.AbstractGraph;
 import priv.eric.mini.engine.entity.graph.Edge;
 import priv.eric.mini.engine.entity.graph.Vertex;

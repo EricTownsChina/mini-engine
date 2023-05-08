@@ -4,6 +4,8 @@ import priv.eric.mini.engine.entity.dag.Node;
 import priv.eric.mini.engine.entity.flow.Context;
 import priv.eric.mini.engine.entity.flow.Pipeline;
 
+import java.util.Properties;
+
 /**
  * Description: print node
  *
@@ -28,7 +30,12 @@ public class PrintNode extends Node {
 
     @Override
     public void process(Context context) {
-        System.out.println(this.getId() + " : " + this.getName() + " : " + this.getDesc());
+        Properties properties = getSelfProp(context);
+        System.out.println("-------" + this.getId() + " : " + this.getName() + "-------");
+        for (String propKey : properties.stringPropertyNames()) {
+            Object valueByExpress = context.getValueByExpress(properties.getProperty(propKey));
+            System.out.println(propKey + " : " + valueByExpress);
+        }
     }
 
     @Override

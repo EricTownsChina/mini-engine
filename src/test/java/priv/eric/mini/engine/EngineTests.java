@@ -11,6 +11,7 @@ import priv.eric.mini.engine.nodes.print.PrintNode;
 import priv.eric.mini.engine.nodes.start.StartNode;
 
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -53,6 +54,8 @@ public class EngineTests {
         Context context = new Context(pipeline);
         context.valueToNode(startNode, "scene", "wap");
         context.valueToNode(startNode, "userId", "622594518");
+
+        context.propToNode(printNode1, "scene", "$004.scene");
 
         pipeline.run(context);
 

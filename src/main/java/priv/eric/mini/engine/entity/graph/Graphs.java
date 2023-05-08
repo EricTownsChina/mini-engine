@@ -1,4 +1,4 @@
-package priv.eric.mini.engine.entity;
+package priv.eric.mini.engine.entity.graph;
 
 import priv.eric.mini.engine.entity.graph.Edge;
 import priv.eric.mini.engine.entity.graph.Graph;

@@ -2,6 +2,9 @@ package priv.eric.mini.engine.entity.flow;
 
 import priv.eric.mini.engine.entity.dag.Dag;
 import priv.eric.mini.engine.entity.dag.Node;
+import priv.eric.mini.engine.entity.exception.ExceptionType;
+import priv.eric.mini.engine.kit.AssertChecker;
+import priv.eric.mini.engine.kit.Extractor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,5 +95,30 @@ public class Context {
 
     public Map<Node, Map<String, Object>> getNodeStorage() {
         return nodeStorage;
+    }
+
+    public <T> T getValueByExpress(String express) {
+        if (express == null || express.isEmpty()) {
+            return null;
+        }
+        if (!express.startsWith("$")) {
+            return (T) express;
+        }
+        int index;
+        if (express.contains(".")) {
+            index = express.indexOf(".");
+        } else {
+            index = express.length() - 1;
+        }
+        String originExpress = express.substring(0, index).replace("$", "");
+        Object originValue = null;
+        if (originExpress.isEmpty()) {
+            originValue = globalStorage;
+        } else {
+            Node node = pipeline.getDag().getNodeById(originExpress);
+            originValue = nodeStorage.get(node);
+        }
+        String postExpress = express.substring(index + 1);
+        return (T) Extractor.of(originValue, postExpress).getValue();
     }
 }
