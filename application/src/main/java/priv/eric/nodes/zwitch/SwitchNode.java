@@ -24,7 +24,7 @@ public class SwitchNode extends Node {
 
     @Override
     public void addComponents() {
-
+        
     }
 
     @Override
