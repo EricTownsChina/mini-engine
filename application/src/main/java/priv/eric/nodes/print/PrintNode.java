@@ -29,7 +29,7 @@ public class PrintNode extends Node {
 
     @Override
     public void process(Context context) {
-        Properties properties = getSelfProp(context);
+        Properties properties = selfProp(context);
         System.out.println("-------" + this.getId() + " : " + this.getName() + "-------");
         for (String propKey : properties.stringPropertyNames()) {
             Object valueByExpress = context.getValueByExpress(properties.getProperty(propKey));

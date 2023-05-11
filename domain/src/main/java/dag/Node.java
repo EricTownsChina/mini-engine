@@ -123,8 +123,16 @@ public abstract class Node extends Vertex {
         context.valueToGlobal(key, value);
     }
 
-    public Properties getSelfProp(Context context) {
+    public Properties selfProp(Context context) {
         return context.getNodeProp().getOrDefault(this, new Properties());
+    }
+
+    public <T> T selfPropJsonValue(Context context, String key, Class<T> clazz) {
+        return context.jsonPropFromNode(this, key, clazz);
+    }
+
+    public <T> T globalPropJsonValue(Context context, String key, Class<T> clazz) {
+        return context.jsonPropFromGlobal(key, clazz);
     }
 
     public void valueToSelfStorage(Context context, String key, Object value) {

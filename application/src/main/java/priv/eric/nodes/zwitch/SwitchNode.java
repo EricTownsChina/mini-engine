@@ -29,7 +29,10 @@ public class SwitchNode extends Node {
 
     @Override
     public void process(Context context) {
-        Properties properties = getSelfProp(context);
+        Properties properties = selfProp(context);
+
+        Condition condition = selfPropJsonValue(context, "condition", Condition.class);
+
     }
 
     @Override

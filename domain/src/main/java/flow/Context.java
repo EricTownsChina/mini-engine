@@ -1,6 +1,8 @@
 package flow;
 
+import common.kit.Constants;
 import common.kit.Extractor;
+import common.kit.Storage;
 import dag.Dag;
 import dag.Node;
 
@@ -65,18 +67,38 @@ public class Context {
         return properties.getProperty(key);
     }
 
+    public <T> T jsonPropFromNode(Node node, String key, Class<T> clazz) {
+        String value = propFromNode(node, key);
+        return Storage.defaultGson().fromJson(value, clazz);
+    }
+
     public String propFromGlobal(String key) {
         return globalProp.getProperty(key);
+    }
+
+    public <T> T jsonPropFromGlobal(String key, Class<T> clazz) {
+        String value = propFromGlobal(key);
+        return Storage.defaultGson().fromJson(value, clazz);
     }
 
     public void propToGlobal(String key, String value) {
         globalProp.setProperty(key, value);
     }
 
+    public void jsonPropToGlobal(String key, Object value) {
+        String valueJsonString = Storage.defaultGson().toJson(value);
+        propToGlobal(key, valueJsonString);
+    }
+
     public void propToNode(Node node, String key, String value) {
         Properties properties = nodeProp.getOrDefault(node, new Properties());
         properties.setProperty(key, value);
         nodeProp.put(node, properties);
+    }
+
+    public void jsonPropToNode(Node node, String key, Object value) {
+        String valueJsonString = Storage.defaultGson().toJson(value);
+        propToNode(node, key, valueJsonString);
     }
 
     public Properties getGlobalProp() {
@@ -99,17 +121,12 @@ public class Context {
         if (express == null || express.isEmpty()) {
             return null;
         }
-        if (!express.startsWith("$")) {
+        if (!express.startsWith(Constants.DOLLAR)) {
             return (T) express;
         }
-        int index;
-        if (express.contains(".")) {
-            index = express.indexOf(".");
-        } else {
-            index = express.length() - 1;
-        }
-        String originExpress = express.substring(0, index).replace("$", "");
-        Object originValue = null;
+        int index = express.contains(Constants.DOT) ? express.indexOf(Constants.DOT) : express.length() - 1;
+        String originExpress = express.substring(0, index).replace(Constants.DOLLAR, Constants.EMPTY_STR);
+        Object originValue;
         if (originExpress.isEmpty()) {
             originValue = globalStorage;
         } else {
