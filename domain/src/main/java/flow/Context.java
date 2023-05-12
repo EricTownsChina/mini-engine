@@ -6,10 +6,7 @@ import common.kit.Storage;
 import dag.Dag;
 import dag.Node;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Description: context of {@link Pipeline}
@@ -18,6 +15,14 @@ import java.util.Set;
  * @date 2023/4/28 16:49
  */
 public class Context {
+
+    /**
+     * Context Keyword
+     */
+    public static final String INPUT = "INPUT";
+    public static final String OUTPUT = "OUTPUT";
+
+    private final String id;
 
     private final Pipeline pipeline;
 
@@ -30,6 +35,7 @@ public class Context {
     private final Map<Node, Map<String, Object>> nodeStorage;
 
     public Context(Pipeline pipeline) {
+        this.id = UUID.randomUUID().toString().replace(Constants.MINUS, Constants.EMPTY_STR);
         this.pipeline = pipeline;
         Dag dag = pipeline.getDag();
         Set<Node> vertexes = dag.vertexes();
@@ -37,6 +43,10 @@ public class Context {
         nodeProp = new HashMap<>(vertexes.size());
         globalStorage = new HashMap<>(1);
         nodeStorage = new HashMap<>(vertexes.size());
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public Pipeline getPipeline() {

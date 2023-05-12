@@ -1,5 +1,6 @@
 package priv.eric.nodes.zwitch;
 
+import condition.Condition;
 import dag.Node;
 import flow.Context;
 
@@ -30,7 +31,6 @@ public class SwitchNode extends Node {
     @Override
     public void process(Context context) {
         Properties properties = selfProp(context);
-
         Condition condition = selfPropJsonValue(context, "condition", Condition.class);
 
     }

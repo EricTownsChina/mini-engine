@@ -13,5 +13,6 @@ public final class Constants {
     public static final String EMPTY_STR = "";
     public static final String DOLLAR = "$";
     public static final String DOT = ".";
+    public static final String MINUS = "-";
 
 }

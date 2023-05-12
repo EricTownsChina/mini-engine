@@ -1,4 +1,4 @@
-package priv.eric.nodes.zwitch;
+package condition;
 
 /**
  * Description: Switch Node's comparison

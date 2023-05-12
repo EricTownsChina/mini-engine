@@ -115,6 +115,17 @@ public abstract class Node extends Vertex {
      */
     public abstract void record(Context context);
 
+    /**
+     * touch this node or not
+     *
+     * @param context {@link Context}
+     * @return boolean
+     */
+    public boolean touch(Context context) {
+        return true;
+    }
+
+
     public Properties getGlobalProp(Context context) {
         return context.getGlobalProp();
     }
@@ -141,7 +152,8 @@ public abstract class Node extends Vertex {
 
     public enum Type {
         BLANK,
-        START,
+        INPUT,
+        OUTPUT,
         PRINT,
         SWITCH,
         CACHE,
