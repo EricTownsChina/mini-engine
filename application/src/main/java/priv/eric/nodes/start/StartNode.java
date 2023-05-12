@@ -34,7 +34,7 @@ public class StartNode extends Node {
     @Override
     public void process(Context context) {
         System.out.println(getId() + " : " + getName() + " : " + getDesc());
-        Properties properties = getSelfProp(context);
+        Properties properties = selfProp(context);
         Set<String> propKeys = properties.stringPropertyNames();
         for (String propKey : propKeys) {
             String propValue = properties.getProperty(propKey);

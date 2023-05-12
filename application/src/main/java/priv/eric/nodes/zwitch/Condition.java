@@ -10,29 +10,34 @@ import java.util.List;
  */
 public class Condition {
 
-    /**
-     * default relationship is and.
-     */
-    private Relationship relationship = Relationship.AND;
+    private Relationship relationship;
 
     private List<Comparison> comparisonList;
+
+    private String nextNodeId;
 
     public Relationship getRelationship() {
         return relationship;
     }
 
-    public Condition setRelationship(Relationship relationship) {
+    public void setRelationship(Relationship relationship) {
         this.relationship = relationship;
-        return this;
     }
 
     public List<Comparison> getComparisonList() {
         return comparisonList;
     }
 
-    public Condition setComparisonList(List<Comparison> comparisonList) {
+    public void setComparisonList(List<Comparison> comparisonList) {
         this.comparisonList = comparisonList;
-        return this;
+    }
+
+    public String getNextNodeId() {
+        return nextNodeId;
+    }
+
+    public void setNextNodeId(String nextNodeId) {
+        this.nextNodeId = nextNodeId;
     }
 
     private enum Relationship {

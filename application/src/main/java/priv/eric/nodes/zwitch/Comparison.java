@@ -8,37 +8,34 @@ package priv.eric.nodes.zwitch;
  */
 public class Comparison {
 
-    private String activeExpress;
+    private String var0Express;
 
     private ComparisonOperator comparisonOperator;
 
-    private String passiveExpress;
+    private String[] var1Express;
 
-    public String getActiveExpress() {
-        return activeExpress;
+    public String getVar0Express() {
+        return var0Express;
     }
 
-    public Comparison setActiveExpress(String activeExpress) {
-        this.activeExpress = activeExpress;
-        return this;
+    public void setVar0Express(String var0Express) {
+        this.var0Express = var0Express;
     }
 
     public ComparisonOperator getComparisonOperator() {
         return comparisonOperator;
     }
 
-    public Comparison setComparisonOperator(ComparisonOperator comparisonOperator) {
+    public void setComparisonOperator(ComparisonOperator comparisonOperator) {
         this.comparisonOperator = comparisonOperator;
-        return this;
     }
 
-    public String getPassiveExpress() {
-        return passiveExpress;
+    public String[] getVar1Express() {
+        return var1Express;
     }
 
-    public Comparison setPassiveExpress(String passiveExpress) {
-        this.passiveExpress = passiveExpress;
-        return this;
+    public void setVar1Express(String[] var1Express) {
+        this.var1Express = var1Express;
     }
 
     private enum ComparisonOperator {

@@ -1,7 +1,6 @@
 package dag;
 
 
-import common.kit.DefaultStorage;
 import flow.Context;
 import graph.Vertex;
 
@@ -124,28 +123,16 @@ public abstract class Node extends Vertex {
         context.valueToGlobal(key, value);
     }
 
-    public Properties getSelfProp(Context context) {
+    public Properties selfProp(Context context) {
         return context.getNodeProp().getOrDefault(this, new Properties());
     }
 
-    public String getNodePropValue(Context context, String key) {
-        Properties properties = context.getNodeProp().getOrDefault(this, new Properties());
-        return properties.getProperty(key);
+    public <T> T selfPropJsonValue(Context context, String key, Class<T> clazz) {
+        return context.jsonPropFromNode(this, key, clazz);
     }
 
-    public String getGlobalPropValue(Context context, String key) {
-        Properties properties = context.getGlobalProp();
-        return properties.getProperty(key);
-    }
-
-    public <T> T getNodePropFromJson(Context context, String key, Class<T> clazz) {
-        String value = getNodePropValue(context, key);
-        return DefaultStorage.defaultGson().fromJson(value, clazz);
-    }
-
-    public <T> T getGlobalPropFromJson(Context context, String key, Class<T> clazz) {
-        String value = getGlobalPropValue(context, key);
-        return DefaultStorage.defaultGson().fromJson(value, clazz);
+    public <T> T globalPropJsonValue(Context context, String key, Class<T> clazz) {
+        return context.jsonPropFromGlobal(key, clazz);
     }
 
     public void valueToSelfStorage(Context context, String key, Object value) {
