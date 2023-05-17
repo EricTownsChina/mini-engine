@@ -16,10 +16,6 @@ public class SpringBeanLoader implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
-    private static ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (SpringBeanLoader.applicationContext == null) {
@@ -28,11 +24,11 @@ public class SpringBeanLoader implements ApplicationContextAware {
     }
 
     public static <T> T getBean(String name, Class<T> clazz) {
-        return getApplicationContext().getBean(name, clazz);
+        return applicationContext.getBean(name, clazz);
     }
 
     public static <T> T getBean(Class<T> clazz) {
-        return getApplicationContext().getBean(clazz);
+        return applicationContext.getBean(clazz);
     }
 
 }

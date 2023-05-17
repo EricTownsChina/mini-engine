@@ -60,7 +60,7 @@ public class Node extends Vertex {
     }
 
     public void valueToGlobalStorage(Context context, String key, Object value) {
-        context.valueToGlobal(key, value);
+        context.storeValueToGlobal(key, value);
     }
 
     public Properties selfProp(Context context) {
@@ -72,11 +72,11 @@ public class Node extends Vertex {
     }
 
     public <T> T globalPropJsonValue(Context context, String key, Class<T> clazz) {
-        return context.jsonPropFromGlobal(key, clazz);
+        return context.getJsonPropFromGlobal(key, clazz);
     }
 
     public void valueToSelfStorage(Context context, String key, Object value) {
-        context.valueToNode(this, key, value);
+        context.storeValueToNode(this, key, value);
     }
 
     public enum State {

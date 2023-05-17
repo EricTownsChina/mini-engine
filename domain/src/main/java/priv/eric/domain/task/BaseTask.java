@@ -31,6 +31,10 @@ public abstract class BaseTask implements Task {
         this.type = type();
     }
 
+    public void loadComponents() {
+        components();
+    }
+
     @Override
     public void setContext(Context context) {
         this.context = context;
@@ -80,11 +84,11 @@ public abstract class BaseTask implements Task {
     }
 
     protected void storeToNode(String key, Object value) {
-        context.valueToNode(this.node, key, value);
+        context.storeValueToNode(this.node, key, value);
     }
 
     protected void storeToGlobal(String key, Object value) {
-        context.valueToGlobal(key, value);
+        context.storeValueToGlobal(key, value);
     }
 
     protected <T> T getValueByExpress(String express) {
@@ -96,6 +100,7 @@ public abstract class BaseTask implements Task {
         INPUT,
         OUTPUT,
         PRINT,
+        HTTP_REQUEST,
         SWITCH,
         CACHE,
         FILTER,

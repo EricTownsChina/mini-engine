@@ -22,6 +22,7 @@ public class TasksManager {
         ServiceLoader<BaseTask> serviceLoader = ServiceLoader.load(BaseTask.class);
         Iterator<BaseTask> iterator = serviceLoader.iterator();
         for (BaseTask task : serviceLoader) {
+            task.loadComponents();
             TASK_MAP.put(task.getType().name(), task);
         }
     }

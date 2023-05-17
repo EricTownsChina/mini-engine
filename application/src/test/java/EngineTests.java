@@ -71,17 +71,17 @@ public class EngineTests {
 
         Pipeline pipeline = new Pipeline(dag, inputNode);
         Context context = new Context(pipeline);
-        context.valueToNode(inputNode, "scene", "wap");
-        context.valueToNode(inputNode, "userId", "622594518");
+        context.storeValueToNode(inputNode, "scene", "wap");
+        context.storeValueToNode(inputNode, "userId", "622594518");
 
-        context.propToNode(printNode1, "scene", "$004.scene");
+        context.putPropToNode(printNode1, "scene", "$004.scene");
 
-        context.propToNode(outputNode, "scene", "$004.scene");
-        context.propToNode(outputNode, "userId", "$004.userId");
+        context.putPropToNode(outputNode, "scene", "$004.scene");
+        context.putPropToNode(outputNode, "userId", "$004.userId");
 
         pipeline.run(context);
 
-        Object result = context.valueFromGlobal(Context.OUTPUT);
+        Object result = context.getValueFromGlobal(Context.OUTPUT);
         System.out.println("out : " + Storage.defaultGson().toJson(result));
 
         System.out.println("---------------");

@@ -1,3 +1,4 @@
 priv.eric.application.tasks.repo.InputTask
 priv.eric.application.tasks.repo.OutputTask
 priv.eric.application.tasks.repo.PrintTask
+priv.eric.application.tasks.repo.HttpRequestTask

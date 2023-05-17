@@ -28,9 +28,6 @@ public class InputTask extends BaseTask {
     @Override
     public void process() {
         Properties properties = getNodeProp();
-        if (properties.isEmpty()) {
-            return;
-        }
         Map<String, Object> inputMap = new HashMap<>(properties.size());
         for (String key : properties.stringPropertyNames()) {
             String propValue = properties.getProperty(key);

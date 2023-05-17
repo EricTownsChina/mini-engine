@@ -53,20 +53,20 @@ public class Context {
         return pipeline;
     }
 
-    public <T> T valueFromGlobal(String key) {
+    public <T> T getValueFromGlobal(String key) {
         return (T) globalStorage.get(key);
     }
 
-    public <T> T valueFromNode(Node node, String key) {
+    public <T> T getValueFromNode(Node node, String key) {
         Map<String, Object> storage = nodeStorage.getOrDefault(node, new HashMap<>(0));
         return (T) storage.get(key);
     }
 
-    public void valueToGlobal(String key, Object value) {
+    public void storeValueToGlobal(String key, Object value) {
         globalStorage.put(key, value);
     }
 
-    public void valueToNode(Node node, String key, Object value) {
+    public void storeValueToNode(Node node, String key, Object value) {
         Map<String, Object> storage = nodeStorage.getOrDefault(node, new HashMap<>(1));
         storage.put(key, value);
         nodeStorage.put(node, storage);
@@ -82,33 +82,33 @@ public class Context {
         return Storage.defaultGson().fromJson(value, clazz);
     }
 
-    public String propFromGlobal(String key) {
+    public String getPropFromGlobal(String key) {
         return globalProp.getProperty(key);
     }
 
-    public <T> T jsonPropFromGlobal(String key, Class<T> clazz) {
-        String value = propFromGlobal(key);
+    public <T> T getJsonPropFromGlobal(String key, Class<T> clazz) {
+        String value = getPropFromGlobal(key);
         return Storage.defaultGson().fromJson(value, clazz);
     }
 
-    public void propToGlobal(String key, String value) {
+    public void putPropToGlobal(String key, String value) {
         globalProp.setProperty(key, value);
     }
 
-    public void jsonPropToGlobal(String key, Object value) {
+    public void getJsonPropToGlobal(String key, Object value) {
         String valueJsonString = Storage.defaultGson().toJson(value);
-        propToGlobal(key, valueJsonString);
+        putPropToGlobal(key, valueJsonString);
     }
 
-    public void propToNode(Node node, String key, String value) {
+    public void putPropToNode(Node node, String key, String value) {
         Properties properties = nodeProp.getOrDefault(node, new Properties());
         properties.setProperty(key, value);
         nodeProp.put(node, properties);
     }
 
-    public void jsonPropToNode(Node node, String key, Object value) {
+    public void getJsonPropToNode(Node node, String key, Object value) {
         String valueJsonString = Storage.defaultGson().toJson(value);
-        propToNode(node, key, valueJsonString);
+        putPropToNode(node, key, valueJsonString);
     }
 
     public Properties getGlobalProp() {
