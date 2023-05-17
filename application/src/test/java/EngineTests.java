@@ -1,18 +1,19 @@
 
-import common.kit.Storage;
-import dag.Dag;
-import dag.Line;
-import dag.Node;
-import flow.Context;
-import flow.Pipeline;
-import graph.Edge;
-import priv.eric.nodes.output.OutputNode;
-import priv.eric.nodes.print.PrintNode;
-import priv.eric.nodes.input.InputNode;
+import org.junit.jupiter.api.BeforeEach;
+import priv.eric.application.tasks.TasksManager;
+import priv.eric.domain.task.BaseTask;
+import priv.eric.infrastructure.common.kit.Storage;
+import priv.eric.domain.dag.Dag;
+import priv.eric.domain.dag.Line;
+import priv.eric.domain.dag.Node;
+import priv.eric.domain.flow.Context;
+import priv.eric.domain.flow.Pipeline;
+import priv.eric.infrastructure.graph.Edge;
 import org.junit.jupiter.api.Test;
 
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,14 +24,27 @@ import java.util.Set;
  */
 public class EngineTests {
 
+    private Map<String, BaseTask> taskMap;
+
+    @BeforeEach
+    public void prepareTasks() {
+        taskMap = TasksManager.getTaskMap();
+    }
+
     @Test
     public void printTest() {
-        InputNode inputNode = new InputNode("004", "StartNode", "request in.");
-        PrintNode printNode = new PrintNode("000", "PrintNode", "print node's name and desc.");
-        PrintNode printNode1 = new PrintNode("001", "PrintNode1", "print node's name and desc.");
-        PrintNode printNode2 = new PrintNode("002", "PrintNode2", "print node's name and desc.");
-        PrintNode printNode3 = new PrintNode("003", "PrintNode3", "print node's name and desc.");
-        OutputNode outputNode = new OutputNode("-1", "OutputNode", "out.");
+        Node inputNode = new Node("004");
+        inputNode.setTask(taskMap.get("INPUT"));
+        Node printNode = new Node("000");
+        printNode.setTask(taskMap.get("PRINT"));
+        Node printNode1 = new Node("001");
+        printNode1.setTask(taskMap.get("PRINT"));
+        Node printNode2 = new Node("002");
+        printNode2.setTask(taskMap.get("PRINT"));
+        Node printNode3 = new Node("003");
+        printNode3.setTask(taskMap.get("PRINT"));
+        Node outputNode = new Node("-1");
+        outputNode.setTask(taskMap.get("OUTPUT"));
         Set<Node> nodes = new HashSet<>(4);
         nodes.add(inputNode);
         nodes.add(printNode);
