@@ -1,8 +1,11 @@
-package priv.eric.domain.task;
+package priv.eric.application.tasks;
 
 import priv.eric.domain.dag.Node;
 import priv.eric.domain.flow.Context;
+import priv.eric.domain.task.Task;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -13,31 +16,43 @@ import java.util.Properties;
  */
 public abstract class BaseTask implements Task {
 
+    private final Type type;
+    private final Map<String, Object> components = new HashMap<>(0);
     private Context context;
-
     private Node node;
 
-    private final Type type;
+    public BaseTask() {
+        this.type = type();
+    }
 
     protected Context getContext() {
         return this.context;
+    }
+
+    @Override
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public Type getType() {
         return type;
     }
 
-    public BaseTask() {
-        this.type = type();
+    public Map<String, Object> getComponents() {
+        return components;
     }
 
-    public void loadComponents() {
-        components();
+    public <T> T getComponent(String componentKey) {
+        Object bean = components.get(componentKey);
+        if (bean == null) {
+            throw new NoComponentException(componentKey);
+        } else {
+            return (T) bean;
+        }
     }
 
-    @Override
-    public void setContext(Context context) {
-        this.context = context;
+    public void putComponent(String componentKey, Object componentBean) {
+        components.put(componentKey, componentBean);
     }
 
     protected Node getNode() {
@@ -57,7 +72,9 @@ public abstract class BaseTask implements Task {
 
     protected abstract Type type();
 
-    protected abstract void components();
+    protected void components() {
+
+    }
 
     protected abstract void process();
 

@@ -1,10 +1,6 @@
 package priv.eric.application.tasks;
 
-import priv.eric.domain.task.BaseTask;
-import priv.eric.domain.task.Task;
-
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 
@@ -14,15 +10,24 @@ import java.util.ServiceLoader;
  * @author EricTowns
  * @date 2023/5/17 16:12
  */
-public class TasksManager {
+public class TasksManager<T> {
 
     private static final Map<String, BaseTask> TASK_MAP = new HashMap<>();
 
+    private static final Map<String, Object> COMPONENTS = new HashMap<>();
+
     static {
         ServiceLoader<BaseTask> serviceLoader = ServiceLoader.load(BaseTask.class);
-        Iterator<BaseTask> iterator = serviceLoader.iterator();
         for (BaseTask task : serviceLoader) {
-            task.loadComponents();
+            try {
+                task.components();
+                for (Map.Entry<String, Object> entry : task.getComponents().entrySet()) {
+                    String taskComponentKey = task.getType().name() + "." + entry.getKey();
+                    COMPONENTS.put(taskComponentKey, entry.getValue());
+                }
+            } catch (RuntimeException re) {
+                throw new LoadTaskComponentsException(task.getType().name(), re);
+            }
             TASK_MAP.put(task.getType().name(), task);
         }
     }
@@ -33,6 +38,15 @@ public class TasksManager {
 
     public static Map<String, BaseTask> getTaskMap() {
         return new HashMap<>(TASK_MAP);
+    }
+
+    public static <T> T getComponent(String taskType, String componentKey) {
+        String taskComponentKey = taskType + "." + componentKey;
+        if (COMPONENTS.containsKey(taskComponentKey)) {
+            return (T) COMPONENTS.get(taskComponentKey);
+        } else {
+            throw new NoComponentException(componentKey);
+        }
     }
 
 }

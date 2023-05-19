@@ -1,7 +1,7 @@
 package priv.eric.application.tasks.repo;
 
 import priv.eric.domain.flow.Context;
-import priv.eric.domain.task.BaseTask;
+import priv.eric.application.tasks.BaseTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,11 +18,6 @@ public class OutputTask extends BaseTask {
     @Override
     protected Type type() {
         return Type.OUTPUT;
-    }
-
-    @Override
-    protected void components() {
-
     }
 
     @Override

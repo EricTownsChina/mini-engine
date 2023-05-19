@@ -2,7 +2,7 @@ package priv.eric.application.tasks.repo;
 
 import priv.eric.application.components.HttpService;
 import priv.eric.application.components.SpringBeanLoader;
-import priv.eric.domain.task.BaseTask;
+import priv.eric.application.tasks.BaseTask;
 
 /**
  * Description: todo
@@ -12,8 +12,6 @@ import priv.eric.domain.task.BaseTask;
  */
 public class HttpRequestTask extends BaseTask {
 
-    private HttpService httpService;
-
     @Override
     protected Type type() {
         return Type.HTTP_REQUEST;
@@ -21,12 +19,13 @@ public class HttpRequestTask extends BaseTask {
 
     @Override
     protected void components() {
-        this.httpService = SpringBeanLoader.getBean(HttpService.class);
+        putComponent("httpService", SpringBeanLoader.getBean(HttpService.class));
     }
 
     @Override
     protected void process() {
-
+        HttpService httpService = getComponent("httpService");
+        httpService.get();
     }
 
     @Override

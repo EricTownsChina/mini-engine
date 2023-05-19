@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class HttpService {
 
     public void get() {
-
+        System.out.println("200, ok");
     }
 
 }

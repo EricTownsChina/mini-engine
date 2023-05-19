@@ -23,6 +23,13 @@ public class Node extends Vertex {
 
     public Node(String id) {
         super(id);
+        this.state = State.WAIT;
+    }
+
+    public Node(String id, Task task) {
+        super(id);
+        this.task = task;
+        this.state = State.WAIT;
     }
 
     public Task getTask() {
@@ -83,6 +90,7 @@ public class Node extends Vertex {
         WAIT,
         REJECT,
         APPROVE,
+        SKIP,
         RUNNING,
         COMPLETE,
         PAUSE
