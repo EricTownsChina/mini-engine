@@ -20,7 +20,7 @@ public abstract class AbstractGraph<V extends Vertex> implements Graph<V> {
 
     private final Set<Edge<V>> edges;
 
-    private final Map<V, Set<V>> adjacencyMap;
+    private final Map<String, Set<V>> adjacencyMap;
 
     private final Map<String, Edge<V>> edgeMap;
 
@@ -33,14 +33,31 @@ public abstract class AbstractGraph<V extends Vertex> implements Graph<V> {
             V from = edge.getFrom();
             V to = edge.getTo();
             edgeMap.put(from.getId() + CONNECT + to.getId(), edge);
-            Set<V> postVertexes = adjacencyMap.get(from);
+            Set<V> postVertexes = adjacencyMap.get(from.getId());
             if (postVertexes == null) {
                 postVertexes = new HashSet<>(1);
                 postVertexes.add(to);
-                adjacencyMap.put(from, postVertexes);
+                adjacencyMap.put(from.getId(), postVertexes);
             } else {
                 postVertexes.add(to);
             }
+        }
+    }
+
+    public void addEdgeAndRefresh(Edge<V> edge) {
+        V from = edge.getFrom();
+        V to = edge.getTo();
+        vertexes.add(from);
+        vertexes.add(to);
+        edges.add(edge);
+        edgeMap.put(from.getId() + CONNECT + to.getId(), edge);
+        Set<V> postVertexes = adjacencyMap.get(from.getId());
+        if (postVertexes == null) {
+            postVertexes = new HashSet<>(1);
+            postVertexes.add(to);
+            adjacencyMap.put(from.getId(), postVertexes);
+        } else {
+            postVertexes.add(to);
         }
     }
 
@@ -52,7 +69,7 @@ public abstract class AbstractGraph<V extends Vertex> implements Graph<V> {
         return edges;
     }
 
-    public Map<V, Set<V>> getAdjacencyMap() {
+    public Map<String, Set<V>> getAdjacencyMap() {
         return adjacencyMap;
     }
 

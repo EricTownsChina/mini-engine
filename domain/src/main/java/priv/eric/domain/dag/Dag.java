@@ -6,10 +6,9 @@ import priv.eric.infrastructure.common.exception.InstantiationException;
 import priv.eric.infrastructure.graph.AbstractGraph;
 import priv.eric.infrastructure.graph.Edge;
 import priv.eric.infrastructure.graph.Graphs;
+import priv.eric.infrastructure.graph.Vertex;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -23,40 +22,51 @@ public class Dag extends AbstractGraph<Node> {
 
     private final Map<String, Node> nodeMap;
 
+    private final LinkedHashMap<Node, Integer> runningRoute;
+
+    public Dag() {
+        super(new HashSet<>(0), new HashSet<>(0));
+        this.nodeMap = new HashMap<>(0);
+        this.runningRoute = new LinkedHashMap<>(0);
+    }
+
     public Dag(Set<Node> nodes, Set<Edge<Node>> edges) {
         super(nodes, edges);
         check();
         this.nodeMap = nodes.stream().collect(Collectors.toMap(Node::getId, n -> n));
+        this.runningRoute = new LinkedHashMap<>(nodeMap.size());
     }
 
     @Override
     public void dfs(Node start, Consumer<Node> consumer) {
-        Map<Node, Set<Node>> adjacencyMap = super.getAdjacencyMap();
+        Map<String, Set<Node>> adjacencyMap = super.getAdjacencyMap();
         String startId = start.getId();
         Node startNode = nodeMap.get(startId);
         if (startNode == null) {
             throw new DagException(ExceptionType.DAG_TRAVERSE_NO_ROOT);
         }
-        startNode.checkState();
-        if (Node.State.APPROVE == startNode.getState()) {
+        if (startNode.checkState() && checkRunning(startNode)) {
             consumer.accept(startNode);
-            Set<Node> post = adjacencyMap.getOrDefault(startNode, new HashSet<>(0));
+            runningRoute.put(startNode, 1);
+            Set<Node> post = adjacencyMap.getOrDefault(startNode.getId(), new HashSet<>(0));
             for (Node node : post) {
                 dfsTraverse(node, adjacencyMap, consumer);
             }
         }
     }
 
-    private void dfsTraverse(Node node, Map<Node, Set<Node>> adjacencyMap, Consumer<Node> consumer) {
-        node.checkState();
-        if (Node.State.APPROVE == node.getState()) {
+    private void dfsTraverse(Node node, Map<String, Set<Node>> adjacencyMap, Consumer<Node> consumer) {
+        if (node.checkState() && checkRunning(node)) {
             node.setState(Node.State.RUNNING);
             consumer.accept(node);
+            runningRoute.put(node, 1);
             node.setState(Node.State.COMPLETE);
-            Set<Node> post = adjacencyMap.getOrDefault(node, new HashSet<>(0));
+            Set<Node> post = adjacencyMap.getOrDefault(node.getId(), new HashSet<>(0));
             for (Node postNode : post) {
                 dfsTraverse(postNode, adjacencyMap, consumer);
             }
+        } else {
+            runningRoute.put(node, 1);
         }
     }
 
@@ -100,13 +110,20 @@ public class Dag extends AbstractGraph<Node> {
 
     @Override
     public Set<Node> pre(Node node) {
-        Map<Node, Set<Node>> adjacencyMap = super.getAdjacencyMap();
-        return adjacencyMap.keySet().stream().filter(adjacencyMap::containsKey).collect(Collectors.toSet());
+        Map<String, Set<Node>> adjacencyMap = super.getAdjacencyMap();
+        Set<String> preNodeIds = adjacencyMap.keySet()
+                .stream()
+                .filter(key -> {
+                    Set<Node> nodes = adjacencyMap.getOrDefault(key, new HashSet<>(0));
+                    return nodes.stream().map(Vertex::getId).collect(Collectors.toSet()).contains(node.getId());
+                })
+                .collect(Collectors.toSet());
+        return preNodeIds.stream().map(nodeMap::get).collect(Collectors.toSet());
     }
 
     @Override
     public Set<Node> post(Node node) {
-        return super.getAdjacencyMap().getOrDefault(node, new HashSet<>(0));
+        return super.getAdjacencyMap().getOrDefault(node.getId(), new HashSet<>(0));
     }
 
     @Override
@@ -142,6 +159,32 @@ public class Dag extends AbstractGraph<Node> {
     @Override
     public int outDegree(Node node) {
         return post(node).size();
+    }
+
+    public Dag addEdge(Edge<Node> edge) {
+        addEdgeAndRefresh(edge);
+        return this;
+    }
+
+    public Dag addNode(Node node) {
+        this.getVertexes().add(node);
+        this.nodeMap.put(node.getId(), node);
+        return this;
+    }
+
+    public boolean checkRunning(Node node) {
+        if (runningRoute.containsKey(node)) {
+            return false;
+        }
+        Set<Node> preNodes = pre(node);
+        if (preNodes != null && !preNodes.isEmpty()) {
+            for (Node preNode : preNodes) {
+                if (!runningRoute.containsKey(preNode)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }

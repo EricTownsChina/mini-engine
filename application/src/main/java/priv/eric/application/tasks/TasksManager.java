@@ -1,5 +1,7 @@
 package priv.eric.application.tasks;
 
+import priv.eric.domain.task.Task;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -34,6 +36,10 @@ public class TasksManager<T> {
 
     public static BaseTask getTask(String type) {
         return TASK_MAP.get(type);
+    }
+
+    public static Task getTask(BaseTask.Type type) {
+        return TASK_MAP.get(type.name());
     }
 
     public static Map<String, BaseTask> getTaskMap() {

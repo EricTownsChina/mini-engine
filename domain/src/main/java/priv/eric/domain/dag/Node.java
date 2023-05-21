@@ -26,18 +26,17 @@ public class Node extends Vertex {
         this.state = State.WAIT;
     }
 
-    public Node(String id, Task task) {
-        super(id);
-        this.task = task;
-        this.state = State.WAIT;
+    public static Node build(String id) {
+        return new Node(id);
     }
 
     public Task getTask() {
         return task;
     }
 
-    public void setTask(Task task) {
+    public Node setTask(Task task) {
         this.task = task;
+        return this;
     }
 
     public State getState() {
@@ -58,8 +57,9 @@ public class Node extends Vertex {
         return getId() != null ? getId().hashCode() : 0;
     }
 
-    public void checkState() {
+    public boolean checkState() {
         this.state = State.APPROVE;
+        return true;
     }
 
     public Properties getGlobalProp(Context context) {
@@ -87,12 +87,22 @@ public class Node extends Vertex {
     }
 
     public enum State {
-        WAIT,
-        REJECT,
-        APPROVE,
-        SKIP,
-        RUNNING,
-        COMPLETE,
-        PAUSE
+        PAUSE(-3),
+        SKIP(-2),
+        REJECT(-1),
+        WAIT(0),
+        APPROVE(1),
+        RUNNING(2),
+        COMPLETE(3);
+
+        private Integer code;
+
+        State(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return this.code;
+        }
     }
 }

@@ -14,4 +14,8 @@ public class Line extends Edge<Node> {
         super(from, to);
     }
 
+    public static Line build(Node from, Node to) {
+        return new Line(from, to);
+    }
+
 }

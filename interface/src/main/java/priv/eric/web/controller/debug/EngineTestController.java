@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.RestController;
 import priv.eric.application.tasks.BaseTask;
 import priv.eric.application.tasks.TasksManager;
 import priv.eric.application.tasks.repo.InputTask;
+import priv.eric.application.tasks.repo.PrintTask;
 import priv.eric.domain.dag.Dag;
 import priv.eric.domain.dag.Line;
 import priv.eric.domain.dag.Node;
 import priv.eric.domain.flow.Context;
 import priv.eric.domain.flow.Pipeline;
+import priv.eric.domain.task.Task;
 import priv.eric.infrastructure.common.kit.Storage;
 import priv.eric.infrastructure.graph.Edge;
 import priv.eric.web.entity.Resp;
@@ -35,43 +37,35 @@ public class EngineTestController {
     }
 
     private void test() {
-        BaseTask inputTask = TasksManager.getTask("INPUT");
-        BaseTask printTask = TasksManager.getTask("PRINT");
-        BaseTask outputTask = TasksManager.getTask("OUTPUT");
-        BaseTask httpRequestTask = TasksManager.getTask("HTTP_REQUEST");
-        Node inputNode = new Node("004", inputTask);
-        Node printNode = new Node("000", printTask);
-        Node printNode1 = new Node("001", printTask);
-        Node printNode2 = new Node("002", printTask);
-        Node printNode3 = new Node("003", printTask);
-        Node httpRequestNode = new Node("005", httpRequestTask);
-        Node outputNode = new Node("-1", outputTask);
-        Set<Node> nodes = new HashSet<>(4);
-        nodes.add(inputNode);
-        nodes.add(printNode);
-        nodes.add(printNode1);
-        nodes.add(printNode2);
-        nodes.add(printNode3);
-        nodes.add(httpRequestNode);
-        nodes.add(outputNode);
+        Task inputTask = TasksManager.getTask(BaseTask.Type.INPUT);
+        Task printTask = TasksManager.getTask(BaseTask.Type.PRINT);
+        Task outputTask = TasksManager.getTask(BaseTask.Type.OUTPUT);
+        Task httpRequestTask = TasksManager.getTask(BaseTask.Type.HTTP_REQUEST);
 
-        Edge<Node> edge40 = new Line(inputNode, printNode);
-        Edge<Node> edge01 = new Line(printNode, printNode1);
-        Edge<Node> edge12 = new Line(printNode1, printNode2);
-        Edge<Node> edge13 = new Line(printNode1, printNode3);
-        Edge<Node> edge23 = new Line(printNode2, printNode3);
-        Edge<Node> edge35 = new Line(printNode3, httpRequestNode);
-        Edge<Node> edge3Out = new Line(printNode3, outputNode);
-        Set<Edge<Node>> edges = new HashSet<>(4);
-        edges.add(edge40);
-        edges.add(edge01);
-        edges.add(edge12);
-        edges.add(edge13);
-//        edges.add(edge23);
-        edges.add(edge35);
-//        edges.add(edge3Out);
+        Node inputNode = Node.build("input").setTask(inputTask);
+        Node printNode = Node.build("print0").setTask(printTask);
+        Node printNode1 = Node.build("print1").setTask(printTask);
+        Node printNode2 = Node.build("print2").setTask(printTask);
+        Node printNode3 = Node.build("print3").setTask(printTask);
+        Node httpRequestNode = Node.build("httpRequest0").setTask(httpRequestTask);
+        Node outputNode = Node.build("output").setTask(outputTask);
 
-        Dag dag = new Dag(nodes, edges);
+        Dag dag = new Dag()
+                .addNode(Node.build("input").setTask(inputTask))
+                .addNode(Node.build("print0").setTask(printTask))
+                .addNode(Node.build("print1").setTask(printTask))
+                .addNode(Node.build("print2").setTask(printTask))
+                .addNode(Node.build("print3").setTask(printTask))
+                .addNode(Node.build("httpRequest0").setTask(httpRequestTask))
+                .addNode(Node.build("output").setTask(outputTask))
+
+                .addEdge(Line.build(inputNode, printNode))
+                .addEdge(Line.build(printNode, printNode1))
+                .addEdge(Line.build(printNode1, printNode2))
+                .addEdge(Line.build(printNode1, printNode3))
+                .addEdge(Line.build(printNode2, printNode3))
+                .addEdge(Line.build(printNode3, httpRequestNode))
+                .addEdge(Line.build(printNode3, outputNode));
 
         Pipeline pipeline = new Pipeline(dag, inputNode);
         Context context = new Context(pipeline);
