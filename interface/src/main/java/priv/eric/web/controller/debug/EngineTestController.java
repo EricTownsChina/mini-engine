@@ -19,6 +19,7 @@ import priv.eric.web.entity.Resp;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Description: todo
@@ -50,14 +51,14 @@ public class EngineTestController {
         Node httpRequestNode = Node.build("httpRequest0").setTask(httpRequestTask);
         Node outputNode = Node.build("output").setTask(outputTask);
 
-        Dag dag = new Dag()
-                .addNode(Node.build("input").setTask(inputTask))
-                .addNode(Node.build("print0").setTask(printTask))
-                .addNode(Node.build("print1").setTask(printTask))
-                .addNode(Node.build("print2").setTask(printTask))
-                .addNode(Node.build("print3").setTask(printTask))
-                .addNode(Node.build("httpRequest0").setTask(httpRequestTask))
-                .addNode(Node.build("output").setTask(outputTask))
+        Dag dag = Dag.n()
+                .addNode(inputNode)
+                .addNode(printNode)
+                .addNode(printNode1)
+                .addNode(printNode2)
+                .addNode(printNode3)
+                .addNode(httpRequestNode)
+                .addNode(outputNode)
 
                 .addEdge(Line.build(inputNode, printNode))
                 .addEdge(Line.build(printNode, printNode1))
@@ -65,21 +66,26 @@ public class EngineTestController {
                 .addEdge(Line.build(printNode1, printNode3))
                 .addEdge(Line.build(printNode2, printNode3))
                 .addEdge(Line.build(printNode3, httpRequestNode))
-                .addEdge(Line.build(printNode3, outputNode));
+                .addEdge(Line.build(printNode3, outputNode))
+
+                .build();
 
         Pipeline pipeline = new Pipeline(dag, inputNode);
         Context context = new Context(pipeline);
         context.storeValueToNode(inputNode, "scene", "wap");
         context.storeValueToNode(inputNode, "userId", "622594518");
 
-        context.putPropToNode(printNode1, "scene", "$004.scene");
+        context.putPropToNode(printNode1, "scene", "$input.scene");
 
-        context.putPropToNode(outputNode, "scene", "$004.scene");
-        context.putPropToNode(outputNode, "userId", "$004.userId");
+        context.putPropToNode(outputNode, "scene", "$input.scene");
+        context.putPropToNode(outputNode, "userId", "$input.userId");
 
         pipeline.run(context);
 
         Object result = context.getValueFromGlobal(Context.OUTPUT);
+        String route = dag.getRunningRoute().keySet().stream().map(Node::getId).collect(Collectors.joining("->"));
+        System.out.println();
+        System.out.println("route : " + route);
         System.out.println("out : " + Storage.defaultGson().toJson(result));
 
         System.out.println("---------------");

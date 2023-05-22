@@ -24,10 +24,11 @@ public class Dag extends AbstractGraph<Node> {
 
     private final LinkedHashMap<Node, Integer> runningRoute;
 
-    public Dag() {
-        super(new HashSet<>(0), new HashSet<>(0));
-        this.nodeMap = new HashMap<>(0);
-        this.runningRoute = new LinkedHashMap<>(0);
+    public Dag(Builder builder) {
+        super(builder.nodes, builder.edges);
+        check();
+        this.nodeMap = builder.nodes.stream().collect(Collectors.toMap(Node::getId, n -> n));
+        this.runningRoute = new LinkedHashMap<>(nodeMap.size());
     }
 
     public Dag(Set<Node> nodes, Set<Edge<Node>> edges) {
@@ -35,6 +36,10 @@ public class Dag extends AbstractGraph<Node> {
         check();
         this.nodeMap = nodes.stream().collect(Collectors.toMap(Node::getId, n -> n));
         this.runningRoute = new LinkedHashMap<>(nodeMap.size());
+    }
+
+    public static Builder n() {
+        return new Builder();
     }
 
     @Override
@@ -68,6 +73,10 @@ public class Dag extends AbstractGraph<Node> {
         } else {
             runningRoute.put(node, 1);
         }
+    }
+
+    public LinkedHashMap<Node, Integer> getRunningRoute() {
+        return runningRoute;
     }
 
     public void check() {
@@ -161,17 +170,6 @@ public class Dag extends AbstractGraph<Node> {
         return post(node).size();
     }
 
-    public Dag addEdge(Edge<Node> edge) {
-        addEdgeAndRefresh(edge);
-        return this;
-    }
-
-    public Dag addNode(Node node) {
-        this.getVertexes().add(node);
-        this.nodeMap.put(node.getId(), node);
-        return this;
-    }
-
     public boolean checkRunning(Node node) {
         if (runningRoute.containsKey(node)) {
             return false;
@@ -185,6 +183,35 @@ public class Dag extends AbstractGraph<Node> {
             }
         }
         return true;
+    }
+
+    public static class Builder {
+        private final Set<Node> nodes = new HashSet<>();
+        private final Set<Edge<Node>> edges = new HashSet<>();
+
+        public Builder addNode(Node node) {
+            this.nodes.add(node);
+            return this;
+        }
+
+        public Builder addEdge(Edge<Node> edge) {
+            this.edges.add(edge);
+            return this;
+        }
+
+        public Builder addAllNodes(Set<Node> nodes) {
+            this.nodes.addAll(nodes);
+            return this;
+        }
+
+        public Builder setEdges(Set<Edge<Node>> edges) {
+            this.edges.addAll(edges);
+            return this;
+        }
+
+        public Dag build() {
+            return new Dag(this);
+        }
     }
 
 }

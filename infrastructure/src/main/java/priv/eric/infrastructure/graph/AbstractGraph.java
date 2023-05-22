@@ -44,23 +44,6 @@ public abstract class AbstractGraph<V extends Vertex> implements Graph<V> {
         }
     }
 
-    public void addEdgeAndRefresh(Edge<V> edge) {
-        V from = edge.getFrom();
-        V to = edge.getTo();
-        vertexes.add(from);
-        vertexes.add(to);
-        edges.add(edge);
-        edgeMap.put(from.getId() + CONNECT + to.getId(), edge);
-        Set<V> postVertexes = adjacencyMap.get(from.getId());
-        if (postVertexes == null) {
-            postVertexes = new HashSet<>(1);
-            postVertexes.add(to);
-            adjacencyMap.put(from.getId(), postVertexes);
-        } else {
-            postVertexes.add(to);
-        }
-    }
-
     public Set<V> getVertexes() {
         return vertexes;
     }
