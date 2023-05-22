@@ -1,4 +1,4 @@
-package priv.eric.application.tasks;
+package priv.eric.domain.task;
 
 /**
  * Description: todo

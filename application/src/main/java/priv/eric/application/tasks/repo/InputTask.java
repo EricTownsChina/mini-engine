@@ -1,7 +1,7 @@
 package priv.eric.application.tasks.repo;
 
 import priv.eric.domain.flow.Context;
-import priv.eric.application.tasks.BaseTask;
+import priv.eric.domain.task.BaseTask;
 
 import java.util.HashMap;
 import java.util.Map;

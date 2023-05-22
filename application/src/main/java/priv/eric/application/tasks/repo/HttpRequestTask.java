@@ -2,7 +2,7 @@ package priv.eric.application.tasks.repo;
 
 import priv.eric.application.components.HttpService;
 import priv.eric.application.components.SpringBeanLoader;
-import priv.eric.application.tasks.BaseTask;
+import priv.eric.domain.task.BaseTask;
 
 /**
  * Description: todo

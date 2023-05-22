@@ -1,4 +1,4 @@
-package priv.eric.application.tasks;
+package priv.eric.domain.task;
 
 import priv.eric.domain.dag.Node;
 import priv.eric.domain.flow.Context;

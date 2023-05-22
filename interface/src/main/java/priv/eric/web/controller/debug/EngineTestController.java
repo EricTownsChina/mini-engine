@@ -3,10 +3,8 @@ package priv.eric.web.controller.debug;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import priv.eric.application.tasks.BaseTask;
+import priv.eric.domain.task.BaseTask;
 import priv.eric.application.tasks.TasksManager;
-import priv.eric.application.tasks.repo.InputTask;
-import priv.eric.application.tasks.repo.PrintTask;
 import priv.eric.domain.dag.Dag;
 import priv.eric.domain.dag.Line;
 import priv.eric.domain.dag.Node;
@@ -14,11 +12,8 @@ import priv.eric.domain.flow.Context;
 import priv.eric.domain.flow.Pipeline;
 import priv.eric.domain.task.Task;
 import priv.eric.infrastructure.common.kit.Storage;
-import priv.eric.infrastructure.graph.Edge;
 import priv.eric.web.entity.Resp;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

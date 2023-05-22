@@ -1,7 +1,7 @@
 
 import org.junit.jupiter.api.BeforeEach;
 import priv.eric.application.tasks.TasksManager;
-import priv.eric.application.tasks.BaseTask;
+import priv.eric.domain.task.BaseTask;
 import priv.eric.infrastructure.common.kit.Storage;
 import priv.eric.domain.dag.Dag;
 import priv.eric.domain.dag.Line;

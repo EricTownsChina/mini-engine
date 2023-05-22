@@ -1,5 +1,7 @@
 package priv.eric.application.tasks;
 
+import priv.eric.domain.task.BaseTask;
+import priv.eric.domain.task.NoComponentException;
 import priv.eric.domain.task.Task;
 
 import java.util.HashMap;

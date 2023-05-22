@@ -2,6 +2,7 @@ package priv.eric.domain.dag;
 
 
 import priv.eric.domain.flow.Context;
+import priv.eric.domain.task.BaseTask;
 import priv.eric.infrastructure.graph.Vertex;
 import priv.eric.domain.task.Task;
 
