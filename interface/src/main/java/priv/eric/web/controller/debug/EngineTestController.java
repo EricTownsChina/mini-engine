@@ -78,9 +78,7 @@ public class EngineTestController {
         pipeline.run(context);
 
         Object result = context.getValueFromGlobal(Context.OUTPUT);
-        String route = dag.getRunningRoute().keySet().stream().map(Node::getId).collect(Collectors.joining("->"));
         System.out.println();
-        System.out.println("route : " + route);
         System.out.println("out : " + Storage.defaultGson().toJson(result));
 
         System.out.println("---------------");

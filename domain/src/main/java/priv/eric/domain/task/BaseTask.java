@@ -2,7 +2,6 @@ package priv.eric.domain.task;
 
 import priv.eric.domain.dag.Node;
 import priv.eric.domain.flow.Context;
-import priv.eric.domain.task.Task;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,8 +71,7 @@ public abstract class BaseTask implements Task {
 
     protected abstract Type type();
 
-    protected void components() {
-
+    public void components() {
     }
 
     protected abstract void process();

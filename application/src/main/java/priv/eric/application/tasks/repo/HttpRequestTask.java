@@ -18,7 +18,7 @@ public class HttpRequestTask extends BaseTask {
     }
 
     @Override
-    protected void components() {
+    public void components() {
         putComponent("httpService", SpringBeanLoader.getBean(HttpService.class));
     }
 

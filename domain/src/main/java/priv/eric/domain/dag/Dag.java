@@ -8,7 +8,9 @@ import priv.eric.infrastructure.graph.Edge;
 import priv.eric.infrastructure.graph.Graphs;
 import priv.eric.infrastructure.graph.Vertex;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -22,20 +24,18 @@ public class Dag extends AbstractGraph<Node> {
 
     private final Map<String, Node> nodeMap;
 
-    private final LinkedHashMap<Node, Integer> runningRoute;
-
     public Dag(Builder builder) {
         super(builder.nodes, builder.edges);
         check();
+        this.vertexes().forEach(n -> n.setState(Node.State.RUNNABLE));
         this.nodeMap = builder.nodes.stream().collect(Collectors.toMap(Node::getId, n -> n));
-        this.runningRoute = new LinkedHashMap<>(nodeMap.size());
     }
 
     public Dag(Set<Node> nodes, Set<Edge<Node>> edges) {
         super(nodes, edges);
         check();
+        this.vertexes().forEach(n -> n.setState(Node.State.RUNNABLE));
         this.nodeMap = nodes.stream().collect(Collectors.toMap(Node::getId, n -> n));
-        this.runningRoute = new LinkedHashMap<>(nodeMap.size());
     }
 
     public static Builder n() {
@@ -50,33 +50,21 @@ public class Dag extends AbstractGraph<Node> {
         if (startNode == null) {
             throw new DagException(ExceptionType.DAG_TRAVERSE_NO_ROOT);
         }
-        if (startNode.checkState() && checkRunning(startNode)) {
-            consumer.accept(startNode);
-            runningRoute.put(startNode, 1);
-            Set<Node> post = adjacencyMap.getOrDefault(startNode.getId(), new HashSet<>(0));
-            for (Node node : post) {
-                dfsTraverse(node, adjacencyMap, consumer);
-            }
-        }
+        dfsTraverse(startNode, consumer, adjacencyMap);
     }
 
-    private void dfsTraverse(Node node, Map<String, Set<Node>> adjacencyMap, Consumer<Node> consumer) {
-        if (node.checkState() && checkRunning(node)) {
-            node.setState(Node.State.RUNNING);
-            consumer.accept(node);
-            runningRoute.put(node, 1);
-            node.setState(Node.State.COMPLETE);
-            Set<Node> post = adjacencyMap.getOrDefault(node.getId(), new HashSet<>(0));
-            for (Node postNode : post) {
-                dfsTraverse(postNode, adjacencyMap, consumer);
-            }
-        } else {
-            runningRoute.put(node, 1);
+    private void dfsTraverse(Node node, Consumer<Node> consumer, Map<String, Set<Node>> adjacencyMap) {
+        Node.State state = checkState(node);
+        if (Node.State.RUNNABLE == state) {
+            return;
         }
-    }
-
-    public LinkedHashMap<Node, Integer> getRunningRoute() {
-        return runningRoute;
+        node.setState(state);
+        consumer.accept(node);
+        node.setState(Node.State.SKIP == state ? Node.State.SKIP : Node.State.COMPLETE);
+        Set<Node> post = adjacencyMap.getOrDefault(node.getId(), new HashSet<>(0));
+        for (Node postNode : post) {
+            dfsTraverse(postNode, consumer, adjacencyMap);
+        }
     }
 
     public void check() {
@@ -170,19 +158,25 @@ public class Dag extends AbstractGraph<Node> {
         return post(node).size();
     }
 
-    public boolean checkRunning(Node node) {
-        if (runningRoute.containsKey(node)) {
-            return false;
-        }
+    public Node.State checkState(Node node) {
         Set<Node> preNodes = pre(node);
-        if (preNodes != null && !preNodes.isEmpty()) {
+        if (preNodes.isEmpty()) {
+            return Node.State.RUNNING;
+        } else {
+            int stateCode = 0;
+            int preSize = preNodes.size();
             for (Node preNode : preNodes) {
-                if (!runningRoute.containsKey(preNode)) {
-                    return false;
+                if (preNode.getState() == Node.State.RUNNABLE) {
+                    return Node.State.RUNNABLE;
                 }
+                stateCode += preNode.getState().getCode();
+            }
+            if (stateCode == -preSize) {
+                return Node.State.SKIP;
+            } else {
+                return Node.State.RUNNING;
             }
         }
-        return true;
     }
 
     public static class Builder {

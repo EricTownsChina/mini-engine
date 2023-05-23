@@ -2,7 +2,6 @@ package priv.eric.domain.dag;
 
 
 import priv.eric.domain.flow.Context;
-import priv.eric.domain.task.BaseTask;
 import priv.eric.infrastructure.graph.Vertex;
 import priv.eric.domain.task.Task;
 
@@ -24,7 +23,7 @@ public class Node extends Vertex {
 
     public Node(String id) {
         super(id);
-        this.state = State.WAIT;
+        this.state = State.NEW;
     }
 
     public static Node build(String id) {
@@ -58,11 +57,6 @@ public class Node extends Vertex {
         return getId() != null ? getId().hashCode() : 0;
     }
 
-    public boolean checkState() {
-        this.state = State.APPROVE;
-        return true;
-    }
-
     public Properties getGlobalProp(Context context) {
         return context.getGlobalProp();
     }
@@ -88,15 +82,14 @@ public class Node extends Vertex {
     }
 
     public enum State {
-        PAUSE(-3),
-        SKIP(-2),
-        REJECT(-1),
-        WAIT(0),
-        APPROVE(1),
+        NEW(0),
+        RUNNABLE(1),
         RUNNING(2),
-        COMPLETE(3);
+        SKIP(-1),
+        COMPLETE(3),
+        ;
 
-        private Integer code;
+        private final Integer code;
 
         State(int code) {
             this.code = code;
