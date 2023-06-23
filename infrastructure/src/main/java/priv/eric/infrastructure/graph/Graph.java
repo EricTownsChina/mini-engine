@@ -8,7 +8,7 @@ import java.util.Set;
  * @author EricTowns
  * @date 2023/4/27 23:42
  */
-public interface Graph<V extends Vertex> {
+public interface Graph<V extends Vertex, E extends Edge> {
 
     /**
      * all vertexes in this graph
@@ -22,7 +22,7 @@ public interface Graph<V extends Vertex> {
      *
      * @return edge set
      */
-    Set<Edge<V>> edges();
+    Set<E> edges();
 
     /**
      * Returns true if the edges in this graph are directed
@@ -69,7 +69,7 @@ public interface Graph<V extends Vertex> {
      *
      * @return edge set
      */
-    Set<Edge<V>> incidentEdges(V vertex);
+    Set<E> incidentEdges(V vertex);
 
     /**
      * Returns true if there is an edge that directly connects {@param from} to {@param to}.
@@ -78,7 +78,7 @@ public interface Graph<V extends Vertex> {
      * @param to   to which vertex
      * @return boolean
      */
-    boolean connecting(V from, V to);
+    boolean connecting(String from, String to);
 
     /**
      * the count of vertex's incident edges

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @author EricTowns
  * @date 2023/4/28 16:02
  */
-public class Dag extends AbstractGraph<Node> {
+public class Dag extends AbstractGraph<Node, Line> {
 
     private final Map<String, Node> nodeMap;
 
@@ -31,7 +31,7 @@ public class Dag extends AbstractGraph<Node> {
         this.nodeMap = builder.nodes.stream().collect(Collectors.toMap(Node::getId, n -> n));
     }
 
-    public Dag(Set<Node> nodes, Set<Edge<Node>> edges) {
+    public Dag(Set<Node> nodes, Set<Line> edges) {
         super(nodes, edges);
         check();
         this.vertexes().forEach(n -> n.setState(Node.State.RUNNABLE));
@@ -43,17 +43,16 @@ public class Dag extends AbstractGraph<Node> {
     }
 
     @Override
-    public void dfs(Node start, Consumer<Node> consumer) {
-        Map<String, Set<Node>> adjacencyMap = super.getAdjacencyMap();
-        String startId = start.getId();
-        Node startNode = nodeMap.get(startId);
-        if (startNode == null) {
-            throw new DagException(ExceptionType.DAG_TRAVERSE_NO_ROOT);
-        }
-        dfsTraverse(startNode, consumer, adjacencyMap);
+    public void dfs(String rootId, Consumer<Node> consumer) {
+        Map<String, Set<String>> adjacencyMap = super.getAdjacencyMap();
+        dfsTraverse(rootId, consumer, adjacencyMap);
     }
 
-    private void dfsTraverse(Node node, Consumer<Node> consumer, Map<String, Set<Node>> adjacencyMap) {
+    private void dfsTraverse(String nodeId, Consumer<Node> consumer, Map<String, Set<String>> adjacencyMap) {
+        Node node = nodeMap.get(nodeId);
+        if (null == node) {
+            throw new DagException(ExceptionType.DAG_TRAVERSE_ILLEGAL_NODE);
+        }
         Node.State state = checkState(node);
         if (Node.State.RUNNABLE == state) {
             return;
@@ -61,8 +60,8 @@ public class Dag extends AbstractGraph<Node> {
         node.setState(state);
         consumer.accept(node);
         node.setState(Node.State.SKIP == state ? Node.State.SKIP : Node.State.COMPLETE);
-        Set<Node> post = adjacencyMap.getOrDefault(node.getId(), new HashSet<>(0));
-        for (Node postNode : post) {
+        Set<String> post = adjacencyMap.getOrDefault(node.getId(), new HashSet<>(0));
+        for (String postNode : post) {
             dfsTraverse(postNode, consumer, adjacencyMap);
         }
     }
@@ -83,7 +82,7 @@ public class Dag extends AbstractGraph<Node> {
     }
 
     @Override
-    public Set<Edge<Node>> edges() {
+    public Set<Line> edges() {
         return super.getEdges();
     }
 
@@ -107,12 +106,12 @@ public class Dag extends AbstractGraph<Node> {
 
     @Override
     public Set<Node> pre(Node node) {
-        Map<String, Set<Node>> adjacencyMap = super.getAdjacencyMap();
+        Map<String, Set<String>> adjacencyMap = super.getAdjacencyMap();
         Set<String> preNodeIds = adjacencyMap.keySet()
                 .stream()
                 .filter(key -> {
-                    Set<Node> nodes = adjacencyMap.getOrDefault(key, new HashSet<>(0));
-                    return nodes.stream().map(Vertex::getId).collect(Collectors.toSet()).contains(node.getId());
+                    Set<String> nodes = adjacencyMap.getOrDefault(key, new HashSet<>(0));
+                    return nodes.contains(node.getId());
                 })
                 .collect(Collectors.toSet());
         return preNodeIds.stream().map(nodeMap::get).collect(Collectors.toSet());
@@ -120,13 +119,14 @@ public class Dag extends AbstractGraph<Node> {
 
     @Override
     public Set<Node> post(Node node) {
-        return super.getAdjacencyMap().getOrDefault(node.getId(), new HashSet<>(0));
+        Set<String> postNodeIds = super.getAdjacencyMap().getOrDefault(node.getId(), new HashSet<>(0));
+        return postNodeIds.stream().map(nodeMap::get).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Edge<Node>> incidentEdges(Node node) {
-        Map<String, Edge<Node>> edgeMap = super.getEdgeMap();
-        Set<Edge<Node>> incidentEdges = new HashSet<>(1);
+    public Set<Line> incidentEdges(Node node) {
+        Map<String, Line> edgeMap = super.getEdgeMap();
+        Set<Line> incidentEdges = new HashSet<>(1);
         for (String edgeKey : edgeMap.keySet()) {
             if (edgeKey.contains(node.getId())) {
                 incidentEdges.add(edgeMap.get(edgeKey));
@@ -136,8 +136,8 @@ public class Dag extends AbstractGraph<Node> {
     }
 
     @Override
-    public boolean connecting(Node from, Node to) {
-        String edgeKey = from.getId() + AbstractGraph.CONNECT + to.getId();
+    public boolean connecting(String from, String to) {
+        String edgeKey = from + AbstractGraph.CONNECT + to;
         return null != super.getEdgeMap().get(edgeKey);
     }
 
@@ -181,15 +181,15 @@ public class Dag extends AbstractGraph<Node> {
 
     public static class Builder {
         private final Set<Node> nodes = new HashSet<>();
-        private final Set<Edge<Node>> edges = new HashSet<>();
+        private final Set<Line> edges = new HashSet<>();
 
         public Builder addNode(Node node) {
             this.nodes.add(node);
             return this;
         }
 
-        public Builder addEdge(Edge<Node> edge) {
-            this.edges.add(edge);
+        public Builder addEdge(Line line) {
+            this.edges.add(line);
             return this;
         }
 
@@ -198,8 +198,8 @@ public class Dag extends AbstractGraph<Node> {
             return this;
         }
 
-        public Builder setEdges(Set<Edge<Node>> edges) {
-            this.edges.addAll(edges);
+        public Builder setEdges(Set<Line> lines) {
+            this.edges.addAll(lines);
             return this;
         }
 

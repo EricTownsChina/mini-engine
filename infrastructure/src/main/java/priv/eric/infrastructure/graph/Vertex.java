@@ -3,7 +3,7 @@ package priv.eric.infrastructure.graph;
 import java.util.UUID;
 
 /**
- * Description: 顶点
+ * Description: vertex
  *
  * @author EricTowns
  * @date 2023/4/21 23:49
@@ -28,15 +28,6 @@ public abstract class Vertex {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * 顶点是否有效
-     *
-     * @return boolean
-     */
-    public boolean isValid() {
-        return true;
     }
 
 }

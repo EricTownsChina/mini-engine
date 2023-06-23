@@ -3,53 +3,53 @@ package priv.eric.infrastructure.graph;
 import java.util.Objects;
 
 /**
- * Description: 边
+ * Description: edge
  *
  * @author EricTowns
  * @date 2023/4/22 00:32
  */
-public abstract class Edge<V extends Vertex> {
+public abstract class Edge {
 
-    private V from;
+    private String from;
 
-    private V to;
+    private String to;
 
     private Number weight;
 
     public Edge() {
     }
 
-    public Edge(V from, V to) {
-        if (null == from || null == to) {
-            throw new IllegalArgumentException("missing 'from' or 'to' fields");
+    public Edge(String from, String to) {
+        if (null == from || null == to || from.isBlank() || to.isBlank()) {
+            throw new IllegalArgumentException("'from' or 'to' should not be blank.");
         }
         this.from = from;
         this.to = to;
     }
 
-    public Edge(V from, V to, Number weight) {
-        if (null == from || null == to) {
-            throw new IllegalArgumentException("missing 'from' or 'to' fields");
+    public Edge(String from, String to, Number weight) {
+        if (null == from || null == to || from.isBlank() || to.isBlank()) {
+            throw new IllegalArgumentException("'from' or 'to' should not be blank.");
         }
         this.from = from;
         this.to = to;
         this.weight = weight;
     }
 
-    public V getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public Edge<V> setFrom(V from) {
+    public Edge setFrom(String from) {
         this.from = from;
         return this;
     }
 
-    public V getTo() {
+    public String getTo() {
         return to;
     }
 
-    public Edge<V> setTo(V to) {
+    public Edge setTo(String to) {
         this.to = to;
         return this;
     }
@@ -58,7 +58,7 @@ public abstract class Edge<V extends Vertex> {
         return weight;
     }
 
-    public Edge<V> setWeight(Number weight) {
+    public Edge setWeight(Number weight) {
         this.weight = weight;
         return this;
     }
@@ -71,7 +71,7 @@ public abstract class Edge<V extends Vertex> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Edge<V> edge = (Edge<V>) o;
+        Edge edge = (Edge) o;
         return Objects.equals(from, edge.from) && Objects.equals(to, edge.to);
     }
 

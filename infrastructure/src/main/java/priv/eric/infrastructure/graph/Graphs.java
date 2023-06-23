@@ -16,15 +16,15 @@ public final class Graphs {
     private Graphs() {
     }
 
-    public static <V extends Vertex> boolean hasCycle(Graph<V> graph) {
+    public static <V extends Vertex, E extends Edge> boolean hasCycle(Graph<V, E> graph) {
         Set<V> vertexes = graph.vertexes();
-        Set<Edge<V>> edges = graph.edges();
+        Set<E> edges = graph.edges();
         if (vertexes.size() == 1) {
             return false;
         } else if (!graph.directed() && edges.size() >= vertexes.size()) {
             return true;
         } else {
-            Map<V, VertexTravelState> travelVertexMap = new HashMap<>(vertexes.size());
+            Map<String, VertexTravelState> travelVertexMap = new HashMap<>(vertexes.size());
             for (V vertex : vertexes) {
                 if (subHasCycle(graph, travelVertexMap, vertex, null)) {
                     return true;
@@ -34,8 +34,9 @@ public final class Graphs {
         }
     }
 
-    private static <V extends Vertex> boolean subHasCycle(Graph<V> graph, Map<V, VertexTravelState> travelVertexMap, V vertex, V preVertex) {
-        VertexTravelState vertexTravelState = travelVertexMap.get(vertex);
+    private static <V extends Vertex, E extends Edge> boolean subHasCycle(Graph<V, E> graph, Map<String, VertexTravelState> travelVertexMap, V vertex, V preVertex) {
+        String vertexId = vertex.getId();
+        VertexTravelState vertexTravelState = travelVertexMap.get(vertexId);
         if (vertexTravelState == VertexTravelState.COMPLETE) {
             return false;
         }
@@ -50,7 +51,7 @@ public final class Graphs {
                 return true;
             }
         }
-        travelVertexMap.put(vertex, VertexTravelState.COMPLETE);
+        travelVertexMap.put(vertexId, VertexTravelState.COMPLETE);
         return false;
     }
 
@@ -63,7 +64,7 @@ public final class Graphs {
      * @param <V>        Vertex
      * @return boolean
      */
-    private static <V extends Vertex> boolean canTraverseWithoutReusingEdge(Graph<V> graph, V preVertex, V postVertex) {
+    private static <V extends Vertex, E extends Edge> boolean canTraverseWithoutReusingEdge(Graph<V, E> graph, V preVertex, V postVertex) {
         return graph.directed() || !Objects.equals(preVertex, postVertex);
     }
 

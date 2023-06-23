@@ -12,32 +12,32 @@ import java.util.function.Consumer;
  * @author EricTowns
  * @date 2023/4/28 13:58
  */
-public abstract class AbstractGraph<V extends Vertex> implements Graph<V> {
+public abstract class AbstractGraph<V extends Vertex, E extends Edge> implements Graph<V, E> {
 
     public static final String CONNECT = "->";
 
     private final Set<V> vertexes;
 
-    private final Set<Edge<V>> edges;
+    private final Set<E> edges;
 
-    private final Map<String, Set<V>> adjacencyMap;
+    private final Map<String, Set<String>> adjacencyMap;
 
-    private final Map<String, Edge<V>> edgeMap;
+    private final Map<String, E> edgeMap;
 
-    public AbstractGraph(Set<V> vertexes, Set<Edge<V>> edges) {
+    public AbstractGraph(Set<V> vertexes, Set<E> edges) {
         this.vertexes = vertexes;
         this.edges = edges;
         this.adjacencyMap = new HashMap<>(vertexes.size());
         this.edgeMap = new HashMap<>(edges.size());
-        for (Edge<V> edge : edges) {
-            V from = edge.getFrom();
-            V to = edge.getTo();
-            edgeMap.put(from.getId() + CONNECT + to.getId(), edge);
-            Set<V> postVertexes = adjacencyMap.get(from.getId());
+        for (E edge : edges) {
+            String from = edge.getFrom();
+            String to = edge.getTo();
+            edgeMap.put(from + CONNECT + to, edge);
+            Set<String> postVertexes = adjacencyMap.get(from);
             if (postVertexes == null) {
                 postVertexes = new HashSet<>(1);
                 postVertexes.add(to);
-                adjacencyMap.put(from.getId(), postVertexes);
+                adjacencyMap.put(from, postVertexes);
             } else {
                 postVertexes.add(to);
             }
@@ -48,17 +48,17 @@ public abstract class AbstractGraph<V extends Vertex> implements Graph<V> {
         return vertexes;
     }
 
-    public Set<Edge<V>> getEdges() {
+    public Set<E> getEdges() {
         return edges;
     }
 
-    public Map<String, Set<V>> getAdjacencyMap() {
+    public Map<String, Set<String>> getAdjacencyMap() {
         return adjacencyMap;
     }
 
-    public Map<String, Edge<V>> getEdgeMap() {
+    public Map<String, E> getEdgeMap() {
         return edgeMap;
     }
 
-    public abstract void dfs(V start, Consumer<V> consumer);
+    public abstract void dfs(String rootId, Consumer<V> consumer);
 }

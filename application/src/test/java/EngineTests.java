@@ -53,23 +53,23 @@ public class EngineTests {
         nodes.add(printNode3);
         nodes.add(outputNode);
 
-        Edge<Node> edge40 = new Line(inputNode, printNode);
-        Edge<Node> edge01 = new Line(printNode, printNode1);
-        Edge<Node> edge12 = new Line(printNode1, printNode2);
-        Edge<Node> edge13 = new Line(printNode1, printNode3);
-        Edge<Node> edge23 = new Line(printNode2, printNode3);
-        Edge<Node> edge3Out = new Line(printNode3, outputNode);
-        Set<Edge<Node>> edges = new HashSet<>(4);
-        edges.add(edge40);
-        edges.add(edge01);
-        edges.add(edge12);
-        edges.add(edge13);
-        edges.add(edge23);
-        edges.add(edge3Out);
+        Line edge40 = new Line("004", "000");
+        Line edge01 = new Line("000", "001");
+        Line edge12 = new Line("001", "002");
+        Line edge13 = new Line("001", "003");
+        Line edge23 = new Line("002", "003");
+        Line edge3Out = new Line("003", "-1");
+        Set<Line> lines = new HashSet<>(4);
+        lines.add(edge40);
+        lines.add(edge01);
+        lines.add(edge12);
+        lines.add(edge13);
+        lines.add(edge23);
+        lines.add(edge3Out);
 
-        Dag dag = new Dag(nodes, edges);
+        Dag dag = new Dag(nodes, lines);
 
-        Pipeline pipeline = new Pipeline(dag, inputNode);
+        Pipeline pipeline = new Pipeline(dag, "004");
         Context context = new Context(pipeline);
         context.storeValueToNode(inputNode, "scene", "wap");
         context.storeValueToNode(inputNode, "userId", "622594518");

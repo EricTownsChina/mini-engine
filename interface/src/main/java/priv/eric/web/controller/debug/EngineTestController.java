@@ -55,17 +55,17 @@ public class EngineTestController {
                 .addNode(httpRequestNode)
                 .addNode(outputNode)
 
-                .addEdge(Line.build(inputNode, printNode))
-                .addEdge(Line.build(printNode, printNode1))
-                .addEdge(Line.build(printNode1, printNode2))
-                .addEdge(Line.build(printNode1, printNode3))
-                .addEdge(Line.build(printNode2, printNode3))
-                .addEdge(Line.build(printNode3, httpRequestNode))
-                .addEdge(Line.build(printNode3, outputNode))
+                .addEdge(Line.build("input", "print0"))
+                .addEdge(Line.build("print0", "print1"))
+                .addEdge(Line.build("print1", "print2"))
+                .addEdge(Line.build("print1", "print3"))
+                .addEdge(Line.build("print2", "print3"))
+                .addEdge(Line.build("print3", "httpRequest0"))
+                .addEdge(Line.build("httpRequest0", "output"))
 
                 .build();
 
-        Pipeline pipeline = new Pipeline(dag, inputNode);
+        Pipeline pipeline = new Pipeline(dag, "input");
         Context context = new Context(pipeline);
         context.storeValueToNode(inputNode, "scene", "wap");
         context.storeValueToNode(inputNode, "userId", "622594518");

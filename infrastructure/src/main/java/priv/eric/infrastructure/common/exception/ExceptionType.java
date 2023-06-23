@@ -14,7 +14,7 @@ public enum ExceptionType {
 
     GRAPH_NOT_DAG(1, 2001, "graph is not a dag."),
 
-    DAG_TRAVERSE_NO_ROOT(1, 3001, "there is no root node when traverse dag.");
+    DAG_TRAVERSE_ILLEGAL_NODE(1, 3001, "find illegal node when traverse dag.");
 
 
     /**

@@ -17,17 +17,15 @@ public class Pipeline {
 
     private Dag dag;
 
-    private Node first;
+    private String rootId;
 
     private Set<Node> next;
 
     private State state;
 
-    private Mode mode;
-
-    public Pipeline(Dag dag, Node first) {
+    public Pipeline(Dag dag, String rootId) {
         this.dag = dag;
-        this.first = first;
+        this.rootId = rootId;
         this.state = State.BUILD;
     }
 
@@ -39,12 +37,12 @@ public class Pipeline {
         this.dag = dag;
     }
 
-    public Node getFirst() {
-        return first;
+    public Node getRoot() {
+        return dag.getNodeById(rootId);
     }
 
-    public void setFirst(Node first) {
-        this.first = first;
+    public void setRootId(String rootId) {
+        this.rootId = rootId;
     }
 
     public State getState() {
@@ -64,7 +62,7 @@ public class Pipeline {
     }
 
     public void run(Context context) {
-        dag.dfs(first, (node) -> {
+        dag.dfs(rootId, node -> {
             Task task = node.getTask();
             if (task != null) {
                 task.setContext(context);
@@ -73,16 +71,6 @@ public class Pipeline {
             }
         });
         setState(State.COMPLETE);
-    }
-
-    public void debug() {
-
-    }
-
-    private void checkState() {
-        if (state != State.RUNNABLE) {
-            throw new IllegalStateException("pipeline now is not runnable, current state is " + state.name());
-        }
     }
 
     public enum State {
@@ -110,10 +98,5 @@ public class Pipeline {
          * pipeline has exception and stop.
          */
         PAUSE
-    }
-
-    public enum Mode {
-        RUN,
-        DEBUG
     }
 }
